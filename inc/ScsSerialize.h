@@ -172,6 +172,9 @@ public:
 			operator T&() { return Obj(); }
 			
 			/// Returns a reference to the encapsulated object
+			T& operator *() { return Obj(); }
+			
+			/// Returns a pointer to the encapsulated object
 			T* operator ->() { return Ptr(); }
 
 			/// Returns non-zero if valid object

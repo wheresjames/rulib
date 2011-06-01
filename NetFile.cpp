@@ -48,7 +48,7 @@ CNetFile::CNetFile( LPCTSTR pUserAgent )
 
 	m_dwDataRead = 0;
 
-	m_dwBlockSize = 4096;
+	m_dwBlockSize = 128 * 1024;
 
 	m_dwInetFlags = 0;
 	m_dwOpenFlags = INTERNET_FLAG_RESYNCHRONIZE;

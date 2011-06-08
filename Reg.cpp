@@ -1336,3 +1336,56 @@ BOOL CReg::ReadInline(LPBYTE pBuf, DWORD dwSize)
 
 	return TRUE;
 }
+
+static void tabstr( std::string &s, int tabs )
+{
+	for ( int i = 0; i < tabs; i++ )
+		s += "\t";
+}
+
+static std::string json_replace( const std::string &s, const std::string &a, const std::string &b )
+{	std::string _s( s ); std::string::size_type i = 0;
+	while( std::string::npos != ( i = _s.find_first_of( a, i ) ) )
+		_s.replace( i, a.length(), b ), i += b.length();
+	return _s;
+}
+
+static std::string json_escape( const std::string &s )
+{	std::string _s( s );
+	_s = json_replace( _s, "\\", "\\\\" );
+	_s = json_replace( _s, "\"", "\\\"" );
+	return _s;	
+}
+
+std::string& CReg::EncodeJson( std::string &s, int tabs, int array )
+{
+	tabstr( s, tabs ); 
+	s += array ? "[\r\n" : "{\r\n";
+	
+	LPREGKEY prk = NULL;
+	while ( NULL != ( prk = (LPREGKEY)GetNext( prk ) ) )
+	{
+		int nt = tabs + 1;
+		if ( !array )
+		{
+			tabstr( s, nt++ );
+			
+			// Key
+			s += "\""; s += json_escape( prk->cpkey ); s += "\":\r\n";
+
+		} // end if
+	
+		// Encode this block
+		prk->key->EncodeJson( s, nt );
+
+		// Next?
+		if ( prk->pNext ) s += ","; s += "\r\n";
+		
+	} // end while
+		
+	tabstr( s, tabs ); 
+	s += array ? "]\r\n" : "}\r\n";
+
+	return s;
+}
+

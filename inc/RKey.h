@@ -135,6 +135,35 @@ public:
         pipe.Write( "\x0", 1 );
         return std::string( (LPCTSTR)pipe.GetBuffer(), pipe.GetBufferSize() );
     }
+	
+	//==============================================================
+	// EncodeJson()
+	//==============================================================
+	/// Encodes all data keys into a JSON string
+	/**
+		\param [in] s		- String buffer to work with
+		\param [in] tabs	- How far in to tab the data
+		
+		\return Encoded string if success, otherwise an empty string
+	
+		\see 
+	*/
+	std::string& EncodeJson( std::string &s, int tabs );
+	
+	//==============================================================
+	// EncodeJson()
+	//==============================================================
+	/// Encodes all data keys into a JSON string
+	/**
+		\param [in] tabs	- How far in to tab the data
+		
+		\return Encoded string if success, otherwise an empty string
+	
+		\see 
+	*/
+	std::string EncodeJson( int tabs = 0 )
+	{	std::string s; return EncodeJson( s, tabs ); }
+
 
 	//==============================================================
 	// EncodeHttpHeaders()

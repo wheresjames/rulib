@@ -141,6 +141,37 @@ public:
         return (LPCTSTR)pipe.GetBuffer();
     }
 
+	//==============================================================
+	// EncodeJson()
+	//==============================================================
+	/// Encodes all data keys into a JSON string
+	/**
+		\param [in] s		- String buffer to work with
+		\param [in] tabs	- How far in to tab the data
+		\param [in] array	- Non-zero if it should be a flat array,
+							  Zero to encode a keyed map
+		
+		\return Encoded string if success, otherwise an empty string
+	
+		\see 
+	*/
+	std::string& EncodeJson( std::string &s, int tabs, int array = 0 );
+
+	//==============================================================
+	// EncodeJson()
+	//==============================================================
+	/// Encodes all data keys into a JSON string
+	/**
+		\param [in] tabs	- How far in to tab the data
+		\param [in] array	- Non-zero if it should be a flat array,
+							  Zero to encode a keyed map
+		
+		\return Encoded string if success, otherwise an empty string
+	
+		\see 
+	*/
+	std::string EncodeJson( int tabs = 0, int array = 0 )
+	{	std::string s; return EncodeJson( s, tabs, array ); }
 
 	//==============================================================
 	// Copy()

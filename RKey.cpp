@@ -1449,3 +1449,50 @@ BOOL CRKey::Get(LPCTSTR pName, CRKey *pRk)
 	return pRk->ReadInline(	(LPBYTE)GetValuePtr( pName ),
 							GetValueSize( pName ) );
 }
+
+static void tabstr( std::string &s, int tabs )
+{
+	for ( int i = 0; i < tabs; i++ )
+		s += "\t";
+}
+
+static std::string json_replace( const std::string &s, const std::string &a, const std::string &b )
+{	std::string _s( s ); std::string::size_type i = 0;
+	while( std::string::npos != ( i = _s.find_first_of( a, i ) ) )
+		_s.replace( i, a.length(), b ), i += b.length();
+	return _s;
+}
+
+static std::string json_escape( const std::string &s )
+{	std::string _s( s );
+	_s = json_replace( _s, "\\", "\\\\" );
+	_s = json_replace( _s, "\"", "\\\"" );
+	return _s;	
+}
+
+std::string& CRKey::EncodeJson( std::string &s, int tabs )
+{
+	tabstr( s, tabs ); s += "{\r\n";
+
+	int n = 0;
+	LPREGVALUE prv = NULL;
+	while ( ( prv = (LPREGVALUE)GetNext( prv ) ) != NULL )
+	{
+		// Separator
+		if ( n++ ) s += ",\r\n";
+		
+		tabstr( s, tabs + 1 );
+
+		// Key
+		s += "\""; s += json_escape( prv->cpkey ); s += "\": ";
+
+		// Value
+		s += "\""; s += json_escape( GetSz( prv ) ); s += "\"";
+		
+	} // end while
+
+	s += "\r\n"; tabstr( s, tabs ); s += "}";
+	
+	return s;
+}
+

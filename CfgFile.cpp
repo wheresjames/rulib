@@ -462,6 +462,10 @@ BOOL CCfgFile::CanonicalizeBuffer(LPTSTR str, LPBYTE buf, DWORD size)
 			 buf[ i ] != '\"' && buf[ i ] != '&' && buf[ i ] != '%' && buf[ i ] != '+' )
 			str[ p++ ] = buf[ i++ ];
 
+		// Change spaces to '+'
+		else if ( buf[ i ] == ' ' )
+			str[ p++ ] = '+', i++;
+
 		// Binary characters
 		else
 		{	wsprintf( &str[ p ], "%%%02lX", (DWORD)buf[ i++ ] );
@@ -495,7 +499,12 @@ BOOL CCfgFile::DeCanonicalizeBuffer(LPCTSTR str, LPBYTE buf, DWORD max, LPDWORD 
 
 		if ( i >= max );
 
-		else if ( inquotes || str[ i ] != '%' ) buf[ p++ ] = str[ i++ ];
+		// Change '+' to space
+		else if ( !inquotes && str[ i ] == '+' )
+			buf[ p++ ] = ' ', i++;
+		
+		else if ( inquotes || str[ i ] != '%' ) 
+			buf[ p++ ] = str[ i++ ];
 
 		else
 		{
@@ -510,7 +519,7 @@ BOOL CCfgFile::DeCanonicalizeBuffer(LPCTSTR str, LPBYTE buf, DWORD max, LPDWORD 
 				char num[ 3 ];
 
 				// Convert two character hex code
-				num[ 0 ] = str[ i++ ]; num[ 1 ] = str[ i++ ]; num[ 2 ] = 0;				
+				num[ 0 ] = str[ i++ ]; num[ 1 ] = str[ i++ ]; num[ 2 ] = 0;
 				buf[ p++ ] = (BYTE)strtoul( num, &end, 16 );
 
 			} // end else

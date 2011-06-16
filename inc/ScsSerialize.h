@@ -330,7 +330,10 @@ public:
 		T tmp[ 256 ];
 		while ( i < lLen )
 		{
-			if ( IsStdChar( sStr[ i ] ) ) sRes += sStr[ i ];
+			if ( IsStdChar( sStr[ i ] ) ) 
+				sRes += sStr[ i ];
+			else if ( tscsTC( T, ' ' ) == sStr[ i ] ) 
+				sRes += tscsTC( T, '+' );
 			else
 			{	StrFmt( tmp, tscsTT( T, "%%%02lX" ), (long)sStr[ i ] );
 				sRes += tmp;
@@ -360,7 +363,10 @@ public:
 		T tmp[ 256 ];
 		while ( i < lLen )
 		{
-			if ( tscsTC( T, '%' ) != sStr[ i ] ) sRes += sStr[ i ];
+			if ( tscsTC( T, '+' ) == sStr[ i ] ) 
+				sRes += tscsTC( T, ' ' );
+			else if ( tscsTC( T, '%' ) != sStr[ i ] ) 
+				sRes += sStr[ i ];
 			else
 			{
 				tmp[ 0 ] = sStr[ ++i ]; tmp[ 1 ] = sStr[ ++i ]; tmp[ 2 ] = 0;

@@ -77,7 +77,7 @@ class CStackTrace
 {
 public:
 
-	enum { eMaxStack = 1024 };
+	enum { eMaxStack = 128 };
 	
 	/// Encapsulates stack tracing functionality for a single thread
 	class CStack

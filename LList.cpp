@@ -108,7 +108,7 @@ BOOL CLList::InitObject(void *node)
 	return TRUE;
 }
 
-void* CLList::SetObject( void* obj, const void *init, DWORD dwUser, const void *pKey, DWORD dwKeySize)
+void* CLList::SetObject( void* obj, const void *init, LPVOID dwUser, const void *pKey, DWORD dwKeySize)
 {
 	if ( obj == NULL ) return NULL;
 	LPLLISTINFO node = (LPLLISTINFO)obj;
@@ -154,7 +154,7 @@ void* CLList::SetObject( void* obj, const void *init, DWORD dwUser, const void *
 	return obj;
 }
 
-void* CLList::NewObj(DWORD dwSize, const void *init, DWORD dwUser, const void *pKey, DWORD dwKeySize)
+void* CLList::NewObj(DWORD dwSize, const void *init, LPVOID dwUser, const void *pKey, DWORD dwKeySize)
 {
 	// Aquire lock
 	CTlLocalLock ll( GetLock(), m_dwLockTimeout );
@@ -181,7 +181,7 @@ void* CLList::NewObj(DWORD dwSize, const void *init, DWORD dwUser, const void *p
 	return node;
 }
 
-void * CLList::New( const void *init, DWORD dwUser, const void* pKey, DWORD dwKeySize )
+void * CLList::New( const void *init, LPVOID dwUser, const void* pKey, DWORD dwKeySize )
 {	return NewObj( GetObjSize(), init, dwUser, pKey, dwKeySize );
 }
 
@@ -579,7 +579,7 @@ void* CLList::IFind( LPCTSTR pKey )
 	return NULL;
 }
 
-void* CLList::Find(DWORD user)
+void* CLList::Find(LPVOID user)
 {
 	// Aquire lock
 	CTlLocalLock ll( GetLock(), m_dwLockTimeout );
@@ -909,7 +909,7 @@ void* CLList::VerifyPointer(void *ptr)
 }	 
 
 
-void* CLList::FindByUserData(DWORD data)
+void* CLList::FindByUserData(LPVOID data)
 {
 	// Aquire lock
 	CTlLocalLock ll( GetLock(), m_dwLockTimeout );

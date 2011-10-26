@@ -127,7 +127,7 @@ public:
 	T* push_back( T* node = NULL )
 	{	T* pObj = node ? node : _PTR_NEW T;
 		if ( pObj == NULL ) return NULL;
-		LPSTLListInfo pTli = (LPSTLListInfo)New( NULL, (DWORD)pObj );
+		LPSTLListInfo pTli = (LPSTLListInfo)New( NULL, pObj );
 		if ( pTli == NULL ) { _PTR_DELETE( pObj ); return NULL; }
 		return ( pTli->p = pObj );
 	}
@@ -172,7 +172,7 @@ public:
 	{	T* pObj = _PTR_NEW T;
 		if ( pObj == NULL ) return NULL;
 		if ( node != NULL ) *pObj = *node;
-		LPSTLListInfo pTli = (LPSTLListInfo)New( NULL, (DWORD)pObj );
+		LPSTLListInfo pTli = (LPSTLListInfo)New( NULL, pObj );
 		if ( pTli == NULL ) { _PTR_DELETE( pObj ); return NULL; }
 		return ( pTli->p = pObj );
 	}

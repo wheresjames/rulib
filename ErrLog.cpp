@@ -102,7 +102,7 @@ HRESULT _cdecl CErrLog::Add(	LPCTSTR pFile, DWORD dwLine, LPCTSTR pFunction,
 		} // end catch
 
 		// Create error structure
-		LPERRORITEMINFO	peii = (LPERRORITEMINFO)New( NULL, dwErrCode, str );
+		LPERRORITEMINFO	peii = (LPERRORITEMINFO)New( NULL, (LPVOID)dwErrCode, str );
 		if ( peii == NULL ) return dwErrCode;
 
 		// Save error location information

@@ -85,7 +85,7 @@ BOOL CResType::Enum(LPCTSTR pFile, LPCTSTR pType, DWORD max)
 	m_bUnload = TRUE;
 
 	// Save resource type
-	m_dwType = (DWORD)pType;
+	m_dwType = (LPVOID)pType;
 	if ( !IS_INTRESOURCE( pType ) ) strcpy_sz( m_szType, pType );
 
 	// How many do they want?
@@ -104,7 +104,7 @@ BOOL CResType::Enum(HMODULE hMod, LPCTSTR pType, DWORD max)
 	m_hModule = ( hMod != NULL ) ? hMod : GetModuleHandle( NULL );
 
 	// Save resource type
-	m_dwType = (DWORD)pType;
+	m_dwType = (LPVOID)pType;
 	if ( !IS_INTRESOURCE( pType ) ) strcpy_sz( m_szType, pType );
 
 	// How many do they want?
@@ -125,7 +125,7 @@ BOOL CResType::OnEnum(HMODULE hModule, LPCTSTR pType, LPCTSTR pName)
 
 BOOL CResType::Add(LPCTSTR pName)
 {_STT();
-	DWORD dwName = (DWORD)pName;
+	LPVOID dwName = (LPVOID)pName;
 	LPCTSTR szName = pName;
 
 	// What kind of title is it?
@@ -177,7 +177,7 @@ BOOL CResType::LoadResource(LPCTSTR pResource, LPBYTE pPtr, LPDWORD pdwSize, LPC
 	return TRUE;
 }
 
-LPCTSTR CResType::GetType( DWORD dwType, LPCTSTR pType )
+LPCTSTR CResType::GetType( LPVOID dwType, LPCTSTR pType )
 {_STT();
 	// What type of identifier is it?
 	if ( IS_INTRESOURCE( dwType ) )
@@ -224,7 +224,7 @@ HICON CResType::LoadIcon(LPRESTYPEINFO prti, DWORD i, LPDWORD count)
 LPRESTYPEINFO CResType::FindRes(LPCTSTR pRes)
 {_STT();
 	// Check for int
-	if ( IS_INTRESOURCE( pRes ) ) return (LPRESTYPEINFO)CLList::Find( (DWORD)pRes );
+	if ( IS_INTRESOURCE( pRes ) ) return (LPRESTYPEINFO)CLList::Find( (LPVOID)pRes );
 
 	// Find string
 	return (LPRESTYPEINFO)Find( pRes );

@@ -46,7 +46,7 @@ typedef struct tagLLISTINFO
 	DWORD			dwObjSize;
 	
 	/// User DWORD value
-	DWORD			user;
+	LPVOID			user;
 
 	/// Size of key in vpkey
 	DWORD			ksize;
@@ -116,7 +116,7 @@ public:
 	
 		\see 
 	*/
-	virtual void* Find( DWORD user );
+	virtual void* Find( LPVOID user );
 
 	//==============================================================
 	// IFind()
@@ -191,7 +191,7 @@ public:
 	
 		\see 
 	*/
-	virtual void* New( const void *init = NULL, DWORD dwUser = 0, const void* pKey = NULL, DWORD dwKeySize = 0 );
+	virtual void* New( const void *init = NULL, LPVOID dwUser = 0, const void* pKey = NULL, DWORD dwKeySize = 0 );
 
 	//==============================================================
 	// SetObject()
@@ -208,7 +208,7 @@ public:
 	
 		\see ResetObject()
 	*/
-	void* SetObject( void *obj, const void *init = NULL, DWORD dwUser = 0, const void* pKey = NULL, DWORD dwKeySize = 0 );
+	void* SetObject( void *obj, const void *init = NULL, LPVOID dwUser = 0, const void* pKey = NULL, DWORD dwKeySize = 0 );
 	
 	//==============================================================
 	// ResetObject()
@@ -225,7 +225,7 @@ public:
 	
 		\see SetObject()
 	*/
-	void* ResetObject( void *obj, const void *init = NULL, DWORD dwUser = 0, const void* pKey = NULL, DWORD dwKeySize = 0 )
+	void* ResetObject( void *obj, const void *init = NULL, LPVOID dwUser = 0, const void* pKey = NULL, DWORD dwKeySize = 0 )
 	{	DeleteObject( obj ); return SetObject( obj, init, dwUser, pKey, dwKeySize ); }
 	
 	//==============================================================
@@ -373,13 +373,13 @@ public:
 	//==============================================================
 	/// Inserts a DWORD value into the list
 	/**
-		\param [in] dw	-	DWORD value
+		\param [in] dw	-	LPVOID value
 		
 		\return	Pointer to new list element, or NULL if error
 	
 		\see 
 	*/
-	void* CLList::Put(DWORD dw)
+	void* CLList::Put(LPVOID dw)
 	{	return New( NULL, dw ); }
 
 	//==============================================================
@@ -491,7 +491,7 @@ public:
 	
 		\see 
 	*/
-	void* NewObj( DWORD dwSize, const void *init = NULL, DWORD dwUser = 0, const void* pKey = NULL, DWORD dwKeySize = 0 );
+	void* NewObj( DWORD dwSize, const void *init = NULL, LPVOID dwUser = 0, const void* pKey = NULL, DWORD dwKeySize = 0 );
 
 	//==============================================================
 	// FindByUserData()
@@ -506,7 +506,7 @@ public:
 	
 		\see 
 	*/
-	void* FindByUserData( DWORD data );
+	void* FindByUserData( LPVOID data );
 
 	//==============================================================
 	// ReleaseStr()
@@ -771,7 +771,7 @@ public:
 		\param [in] ptr		-	Pointer to list element
 		\param [in] data	-	Number of bytes in ptr.
 	*/
-	void SetUserData( void * ptr, DWORD data )
+	void SetUserData( void * ptr, LPVOID data )
 	{	LPLLISTINFO node = (LPLLISTINFO)ptr;
 		if ( node != NULL ) node->user = data; }
 
@@ -786,7 +786,7 @@ public:
 	
 		\see 
 	*/
-	DWORD GetUserData( void * ptr )
+	LPVOID GetUserData( void * ptr )
 	{	LPLLISTINFO node = (LPLLISTINFO)ptr;
 		if ( node != NULL ) return node->user; 
 		return 0; 

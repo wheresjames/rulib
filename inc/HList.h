@@ -272,7 +272,7 @@ public:
 	
 		\see 
 	*/
-	DWORD GetHash( DWORD dw )
+	DWORD GetHash( LPVOID dw )
 	{	if ( dw == 0 ) return 0;
 		return ( Crc32( 0, (LPBYTE)&dw, sizeof( dw ) ) & m_dwMask ); 
 	}

@@ -1526,7 +1526,7 @@ BOOL CCmpFile::AddLookup(LPCTSTR pLink, LONGLONG offset)
 	NormalizeLink( str, pLink );
 
 	// Add the link
-	return m_lookup.New( NULL, (DWORD)offset, str ) != NULL;
+	return m_lookup.New( NULL, (LPVOID)offset, str ) != NULL;
 }
 
 BOOL CCmpFile::GetLookup(LPCTSTR pLink, LPDWORD poffset)
@@ -1546,7 +1546,7 @@ BOOL CCmpFile::GetLookup(LPCTSTR pLink, LPDWORD poffset)
 	if ( pLi == NULL ) return FALSE;
 
 	// Save offset
-	*poffset = pLi->user;
+	*poffset = (DWORD)pLi->user;
 
 	return TRUE;	
 }

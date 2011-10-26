@@ -63,7 +63,7 @@ public:
 
 	LPCTSTR GetType() { return GetType( m_dwType, m_szType ); }
 
-	static LPCTSTR GetType( DWORD dwType, LPCTSTR pType );
+	static LPCTSTR GetType( LPVOID dwType, LPCTSTR pType );
 	static BOOL LoadResource( LPCTSTR pResource, LPBYTE pPtr, LPDWORD pdwSize, LPCTSTR pType, HMODULE hModule );
 
 
@@ -75,7 +75,7 @@ private:
 	BOOL		m_bUnload;
 	HMODULE		m_hModule;
 	char		m_szType[ CWF_STRSIZE ];
-	DWORD		m_dwType;
+	LPVOID		m_dwType;
 	DWORD		m_dwMaxEnum;
 
 };

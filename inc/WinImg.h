@@ -1121,9 +1121,6 @@ private:
 
 private:
 
-	/// Pointer to CxImage object
-	void			*m_pimg;
-
 	/// Pointer to JPEG encoder state structure
 	void			*m_pEncoderState;
 
@@ -1138,6 +1135,9 @@ private:
 
 	/// Size and position of the current image
 	RECT			m_rect;
+
+	/// Pointer to CxImage object
+	void			*m_pimg;
 
 };
 

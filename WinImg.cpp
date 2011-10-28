@@ -71,11 +71,12 @@ extern "C"
 	This class is completely encapsulated and hidden by CWinImg
 */
 //==================================================================
-class CCxCustomImg : public CxImage
-{
-public:
-
-};
+typedef CxImage CCxCustomImg;
+//class CCxCustomImg : public CxImage
+//{
+//public:
+//
+//};
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

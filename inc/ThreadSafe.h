@@ -293,7 +293,7 @@ public:
 	{	m_bLocked = ( WaitForSingleObject( m_hMutex, timeout ) != WAIT_TIMEOUT );
 		if ( m_bLocked ) m_dwRef++; 
 		else 
-        {   ASSERT( 0 ); TRACE( _T( "Lock Failed!\n" ) ); }
+        {   /* ASSERT( 0 ); */ TRACE( _T( "Lock Failed!\n" ) ); }
 		return m_bLocked; 
 	}
 

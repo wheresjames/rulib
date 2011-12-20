@@ -158,7 +158,7 @@ BOOL CNetFile::Download(LPCTSTR pUrl, LPCTSTR pLocal, BOOL bCloseFileAfterDownlo
 	m_bMem = ( !pLocal || !*pLocal );
 
 	{ // Copy the url
-		
+
 		char buf[ sizeof( m_szUrl ) ];
 		DWORD size = sizeof( m_szUrl ) - 1;
 
@@ -172,7 +172,7 @@ BOOL CNetFile::Download(LPCTSTR pUrl, LPCTSTR pLocal, BOOL bCloseFileAfterDownlo
 			// Copy the url name
 			else strcpy_sz( m_szUrl, pUrl );
 		} // end if
-		
+
 		// Copy the local file name
 		else strcpy_sz( m_szUrl, pUrl );
 
@@ -246,8 +246,8 @@ BOOL CNetFile::Download(LPCTSTR pUrl, LPCTSTR pLocal, BOOL bCloseFileAfterDownlo
 		if ( !m_local.OpenNew( m_szLocal, GENERIC_READ | GENERIC_WRITE ) )
 			return FALSE;
 	} // end else
-	
-	// Set status	
+
+	// Set status
 	m_dwTransferStatus = NETFILE_DS_INITIALIZING;
 
 	// Create a thread to download the file
@@ -276,7 +276,7 @@ BOOL CNetFile::InitThread(LPVOID pData)
 	CWinFile::CrackUrl( m_szUrl, &m_cui );
 
 	m_dwTransferError = 0;
-	
+
 	// Open internet handle
 	m_dwTransferStatus = NETFILE_DS_INITIALIZING;
 
@@ -317,7 +317,7 @@ BOOL CNetFile::InitThread(LPVOID pData)
 											m_szUsername, m_szPassword, INTERNET_SERVICE_HTTP,
 											0, 0 );
 		} // end else
-										
+
 		if ( m_hConnect == NULL )
 		{
 			m_dwTransferStatus = NETFILE_DS_ERROR;
@@ -362,7 +362,7 @@ BOOL CNetFile::InitThread(LPVOID pData)
 
             DWORD dwData = m_sData.strlen();
 			LPCTSTR pData = m_sData;
-			
+
 			// Add variables to url if GET
 			if ( !strcmpi( m_sMethod, "GET" ) )
 			{	fname += "?"; fname += m_sData; 
@@ -453,7 +453,7 @@ BOOL CNetFile::InitThread(LPVOID pData)
 				DoCallback( (WPARAM)m_dwTransferStatus, (LPARAM)this );
 				return FALSE;
 			} // end if
-									
+
 		} // end if	
 	
 	} // end else
@@ -516,7 +516,7 @@ BOOL CNetFile::DoThread(LPVOID pData)
 			// Attempt to read new data
 			DWORD	read = 0;
 			if ( !InternetReadFile( m_hFile, buf, size, &read ) )
-			{			   
+			{
 				delete [] buf;
 				m_dwTransferError = GetLastError();
 				return FALSE;
@@ -580,7 +580,7 @@ BOOL CNetFile::DoThread(LPVOID pData)
 	}
 
 	else
-	{		
+	{
 		// Do we have any memory
 		if ( m_pMem == NULL || m_dwMemSize == 0 )
 		{	m_dwTransferStatus = NETFILE_DS_ERROR;
@@ -596,7 +596,7 @@ BOOL CNetFile::DoThread(LPVOID pData)
 		DWORD left = m_dwMemSize - m_dwDataWritten;
 		DWORD write = ( left < m_dwBlockSize ) ? left : m_dwBlockSize;
 		DWORD written = 0;
-		
+
 		// Attempt to write some data
 		if ( !InternetWriteFile( m_hFile, &m_pMem[ m_dwDataWritten ], write, &written ) )
 		{

@@ -290,7 +290,7 @@ public:
 		\return Non-zero if success
 	*/
 	BOOL Lock( DWORD timeout = TL_LOCK_TIMEOUT ) 
-	{	m_bLocked = ( WaitForSingleObject( m_hMutex, timeout ) != WAIT_TIMEOUT );
+	{	m_bLocked = ( WAIT_OBJECT_0 == WaitForSingleObject( m_hMutex, timeout ) );
 		if ( m_bLocked ) m_dwRef++; 
 		else 
         {   /* ASSERT( 0 ); */ TRACE( _T( "Lock Failed!\n" ) ); }
@@ -302,7 +302,10 @@ public:
 	//==============================================================
 	/// Unlocks the object
 	BOOL Unlock() 
-	{	ReleaseMutex( m_hMutex );
+	{	if ( WAIT_OBJECT_0 != WaitForSingleObject( m_hMutex, 0 ) )
+			return FALSE;
+		ReleaseMutex( m_hMutex );
+		ReleaseMutex( m_hMutex );
 		if ( m_dwRef ) 
 		{	if ( !( --m_dwRef ) ) m_bLocked = FALSE; }
 		return !m_bLocked;

@@ -149,7 +149,7 @@ public:
 		\see 
 	*/
 	std::string& EncodeJson( std::string &s, int tabs );
-	
+
 	//==============================================================
 	// EncodeJson()
 	//==============================================================
@@ -1054,6 +1054,23 @@ public:
 	LPREGVALUE Set( LPCTSTR pName, const void * pValue, DWORD dwValue )
 	{	return Add( REG_BINARY, pName, pValue, dwValue ); }
 
+	//==============================================================
+	// Set()
+	//==============================================================
+	/// Sets the string representation of a guid
+	/**
+		\param [in] pName	-	Value name
+		\param [in] pGuid	-	New value
+		
+		\return Pointer to REGVALUE strucure if success, otherwise NULL
+	
+		\see 
+	*/
+	LPREGVALUE Set( LPCTSTR pName, const GUID *pGuid )
+	{	TCHAR szGuid[ 256 ] = { 0 };
+		return Set( pName, CWin32::GuidToString( szGuid, pGuid ) ); 
+	}
+	
 	//==============================================================
 	// DeleteObject()
 	//==============================================================

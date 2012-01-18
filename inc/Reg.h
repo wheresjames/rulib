@@ -155,7 +155,7 @@ public:
 	
 		\see 
 	*/
-	std::string& EncodeJson( std::string &s, int tabs, int array = 0 );
+	std::string& EncodeJson( std::string &s, int tabs = 0, int array = 0 );
 
 	//==============================================================
 	// EncodeJson()
@@ -928,6 +928,25 @@ public:
 	{	CRKey *prk = GetKey( pKey );
 		if ( prk == NULL ) return FALSE;
 		return ( prk->Set( pName, str ) != NULL );
+	} // end Set
+
+	//==============================================================
+	// Set()
+	//==============================================================
+	/// Sets the string representation of the specified GUID
+	/**
+		\param [in] pKey	-	Key name
+		\param [in] pName	-	Value name
+		\param [in] pGuid	-	GUID to set
+		
+		\return	Non-zero if success
+	
+		\see 
+	*/
+	BOOL Set( LPCTSTR pKey, LPCTSTR pName, const GUID *pGuid )
+	{	CRKey *prk = GetKey( pKey );
+		if ( prk == NULL ) return FALSE;
+		return ( prk->Set( pName, pGuid ) != NULL );
 	} // end Set
 
 	//==============================================================

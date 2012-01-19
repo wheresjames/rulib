@@ -1456,18 +1456,111 @@ static void tabstr( std::string &s, int tabs )
 		s += "\t";
 }
 
-static std::string json_replace( const std::string &s, const std::string &a, const std::string &b )
-{	std::string _s( s ); std::string::size_type i = 0;
-	while( std::string::npos != ( i = _s.find_first_of( a, i ) ) )
-		_s.replace( i, a.length(), b ), i += b.length();
-	return _s;
+long ntoa( char *b, char ch )
+{
+	char c;
+	const long sz = 2;
+
+	// For each nibble
+	for ( long i = 0; i < sz; i++ )
+	{
+		// Grab a nibble
+		c = (char)( ch & 0x0f ); 
+		ch >>= 4;
+
+		if ( 9 >= c )
+			b[ sz - i - 1 ] = '0' + c;
+		else
+			b[ sz - i - 1 ] = 'a' + ( c - 10 );
+
+	} // end for
+
+	return sz;
 }
 
-static std::string json_escape( const std::string &s )
-{	std::string _s( s );
-	_s = json_replace( _s, "\\", "\\\\" );
-	_s = json_replace( _s, "\"", "\\\"" );
-	return _s;	
+/// Returns non-zero if the character is a valid html character
+static bool IsJsonChar( char x_ch )
+{
+	switch( x_ch )
+	{	case '"' :
+		case '\\' :
+		case '\t' :
+		case '\r' :
+		case '\n' :
+			return false;
+	} // end switch
+
+	return ( 0 > x_ch || ' ' <= x_ch ) ? true : false;
+}
+
+static std::string JsonEncodeChar( char x_ch )
+{
+	switch( x_ch )
+	{
+		case '"' :
+			return "\\\"";
+
+		case '\'' :
+			return "\\\\";
+
+		case '\t' :
+			return "\\t";
+
+		case '\r' :
+			return "\\r";
+
+		case '\n' :
+			return "\\n";
+
+	} // end switch
+
+	// Convert to two byte character
+	char s[ 16 ] = { '\\', 'u', '0', '0', 0, 0, 0 };
+	ntoa( &s[ 4 ], x_ch );
+	
+	return std::string( s, 6 );
+}
+
+static std::string JsonEncode( const char *x_pStr, std::string::size_type x_lSize = 0 )
+{
+	if ( !x_pStr || !*x_pStr || 0 >= x_lSize )
+		return std::string();
+	
+	std::string ret;
+	std::string::size_type nStart = 0, nPos = 0;
+
+	while ( nPos < x_lSize )
+	{
+		// Must we encode this one?
+		if ( !IsJsonChar( x_pStr[ nPos ] ) )
+		{
+			// Copy data that's ok
+			if ( nStart < nPos )
+				ret.append( &x_pStr[ nStart ], nPos - nStart );
+
+			// Encode this character
+			ret.append( JsonEncodeChar( x_pStr[ nPos ] ) );
+
+			// Next
+			nStart = ++nPos;
+
+		} // end if
+
+		else
+			nPos++;
+
+	} // end while
+
+	// Copy remaining data
+	if ( nStart < nPos )
+		ret.append( &x_pStr[ nStart ], nPos - nStart );
+
+	return ret;
+}
+
+std::string CRKey::EncodeJsonStr( const std::string &x_str )
+{
+	return JsonEncode( x_str.data(), x_str.length() );
 }
 
 std::string& CRKey::EncodeJson( std::string &s, int tabs )
@@ -1484,11 +1577,18 @@ std::string& CRKey::EncodeJson( std::string &s, int tabs )
 		tabstr( s, tabs + 1 );
 
 		// Key
-		s += "\""; s += json_escape( prv->cpkey ); s += "\": ";
+		s += "\""; s += EncodeJsonStr( prv->cpkey ); s += "\": ";
 
 		// Value
-		s += "\""; s += json_escape( GetSz( prv ) ); s += "\"";
-		
+		s += "\""; 
+
+		if ( prv->type == REG_BINARY )
+			s += EncodeJsonStr( std::string( (const char *)prv->data, prv->size ) );
+		else
+			s += EncodeJsonStr( GetSz( prv ) ); 
+
+		s += "\"";
+
 	} // end while
 
 	s += "\r\n"; tabstr( s, tabs ); s += "}";

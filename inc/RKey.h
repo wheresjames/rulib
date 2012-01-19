@@ -166,6 +166,20 @@ public:
 
 
 	//==============================================================
+	// EncodeJsonStr()
+	//==============================================================
+	/// Encodes JSON string
+	/**
+		\param [in] x_str	- String to encode
+		
+		\return Encoded string if success, otherwise an empty string
+	
+		\see 
+	*/
+	std::string EncodeJsonStr( const std::string &x_str );
+
+
+	//==============================================================
 	// EncodeHttpHeaders()
 	//==============================================================
 	/// Encodes the variables as HTTP request headers

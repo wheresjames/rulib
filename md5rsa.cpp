@@ -340,11 +340,17 @@ BOOL CMd5Rsa::vHash( unsigned char digest[16], DWORD dwBuffers, LPVOID *pArgs )
 			LPBYTE	pPtr = *(LPBYTE*)( ptrExtra );
 			DWORD 	dwSize = *(LPDWORD)( ptrExtra + 1 );
 
-			// Zero means NULL terminated
-			if ( dwSize == 0 && pPtr != NULL ) dwSize = strlen( (LPCTSTR)pPtr );
+			// Must have a valid pointer
+			if ( pPtr )
+			{
+				// Zero means NULL terminated
+				if ( dwSize == 0 ) 
+					dwSize = strlen( (LPCTSTR)pPtr );
 
-			// Update
-			MD5Update( &ctx, pPtr, dwSize );
+				// Update
+				MD5Update( &ctx, pPtr, dwSize );
+
+			} // end if
 
 			// Next params
 			ptrExtra += 2;

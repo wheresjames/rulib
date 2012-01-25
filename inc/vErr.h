@@ -35,6 +35,7 @@
 #define _vDUMPLOG()		CvErr::CreateErrorLog( FALSE, FALSE )
 #define _vTESTCRASH()	CvErr::CreateErrorLog( TRUE, TRUE )
 #define _vLOGDEL()		( _PTR_DELETE( CvErr::m_errlog ) )
+#define _vENABLE		_vLOGOBJ.Enable
 
 //==================================================================
 // CvErr

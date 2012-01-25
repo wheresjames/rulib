@@ -38,6 +38,7 @@ static char THIS_FILE[]=__FILE__;
 CErrLog::CErrLog()
 {_STT();
 
+	m_bEnable = TRUE;
 }
 
 CErrLog::~CErrLog()
@@ -52,6 +53,7 @@ void CErrLog::Destroy()
 
 BOOL CErrLog::InitObject( void *node )
 {_STT();
+
 	// Do initiailization
 	if ( !CLList::InitObject( node ) ) return FALSE;
 
@@ -69,6 +71,7 @@ BOOL CErrLog::InitObject( void *node )
 
 void CErrLog::DeleteObject( void *node )
 {_STT();
+
 	LPERRORITEMINFO peii = (LPERRORITEMINFO)node;
 	if ( peii == NULL ) return;
 
@@ -83,6 +86,10 @@ void CErrLog::DeleteObject( void *node )
 HRESULT _cdecl CErrLog::Add(	LPCTSTR pFile, DWORD dwLine, LPCTSTR pFunction,
 								DWORD dwSeverity, DWORD dwErrCode, LPCTSTR pStr, ... )
 {_STT();
+
+	if ( !m_bEnable )
+		return dwErrCode;
+
 	try // This could GPF if caller screws up
 	{
 		char str[ CWF_STRSIZE * 4 ] = { 0 };

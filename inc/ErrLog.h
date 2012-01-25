@@ -144,6 +144,17 @@ public:
 	HRESULT _cdecl Add(	LPCTSTR pFile, DWORD dwLine, LPCTSTR pFunction,
 						DWORD dwSeverity, DWORD dwErrCode, LPCTSTR pStr, ... );
 
+	//==============================================================
+	// Enable()
+	//==============================================================
+	/// Enable / Disable logging
+	void Enable( BOOL b ) { m_bEnable = b; if ( !b ) Destroy(); }
+						
+private:
+
+	/// Non-zero to disable logging
+	BOOL	m_bEnable;
+
 };
 
 #endif // !defined(AFX_ERRLOG_H__3FA5ABA7_742C_4EB1_923F_CBEB1EFF5A9D__INCLUDED_)

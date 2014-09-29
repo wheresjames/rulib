@@ -651,7 +651,7 @@ BOOL CCmpFile::SaveChunk(LPCMPINFO pCi)
 	} // end if		
 
 	// Add save information
-	pCi->cfg->SetValue( "Source", "HKEY", (DWORD)pCi->hkey );
+	pCi->cfg->SetValue( "Source", "HKEY", RUPTR2DW(pCi->hkey) );
 	pCi->cfg->SetValue( "Source", "String", pCi->str );
 	pCi->cfg->SetValue( "Source", "Name", pCi->name );
 	pCi->cfg->SetValue( "Source", "Size", pCi->dsize );
@@ -1526,7 +1526,7 @@ BOOL CCmpFile::AddLookup(LPCTSTR pLink, LONGLONG offset)
 	NormalizeLink( str, pLink );
 
 	// Add the link
-	return m_lookup.New( NULL, (LPVOID)offset, str ) != NULL;
+	return m_lookup.New( NULL, (LPVOID)offset, str.ptr() ) != NULL;
 }
 
 BOOL CCmpFile::GetLookup(LPCTSTR pLink, LPDWORD poffset)
@@ -1542,11 +1542,11 @@ BOOL CCmpFile::GetLookup(LPCTSTR pLink, LPDWORD poffset)
 	NormalizeLink( str, pLink );
 
 	// Find block data
-	LPLLISTINFO pLi = (LPLLISTINFO)m_lookup.Find( str );
+	LPLLISTINFO pLi = (LPLLISTINFO)m_lookup.Find( str.ptr() );
 	if ( pLi == NULL ) return FALSE;
 
 	// Save offset
-	*poffset = (DWORD)pLi->user;
+	*poffset = RUPTR2INT(pLi->user);
 
 	return TRUE;	
 }

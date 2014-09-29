@@ -149,7 +149,7 @@ public:
 		own when boost comes with VC...		
 	*/
 	//==================================================================
-	template < class T > class CAutoMem
+	template < class AT > class CAutoMem
 	{
 		public:
 
@@ -163,19 +163,19 @@ public:
 			void release() { if ( m_p ) { delete m_p; m_p = NULL; } }
 
 			/// Returns a pointer to encapsulated object
-			T& Obj() { if ( !m_p ) m_p = new T; return *m_p; }
+			AT& Obj() { if ( !m_p ) m_p = new AT; return *m_p; }
 
 			/// Returns a pointer to encapsulated object
-			T* Ptr() { if ( !m_p ) m_p = new T; return m_p; }
+			AT* Ptr() { if ( !m_p ) m_p = new AT; return m_p; }
 
 			/// Returns a reference to the encapsulated object
-			operator T&() { return Obj(); }
+			operator AT&() { return Obj(); }
 			
 			/// Returns a reference to the encapsulated object
-			T& operator *() { return Obj(); }
+			AT& operator *() { return Obj(); }
 			
 			/// Returns a pointer to the encapsulated object
-			T* operator ->() { return Ptr(); }
+			AT* operator ->() { return Ptr(); }
 
 			/// Returns non-zero if valid object
 			int IsValid() { return NULL != m_p; }
@@ -183,7 +183,7 @@ public:
 		private:
 
 			/// Contains a pointer to the controlled object
-			T		*m_p;
+			AT		*m_p;
 			
 	};
 
@@ -400,7 +400,7 @@ public:
             return m_str.Obj();
 
 		// Iterator
-		t_StringArray::iterator pos = m_lstSub.begin();
+		typename t_StringArray::iterator pos = m_lstSub.begin();
 
 		// For each array element
 		while ( pos != m_lstSub.end() )
@@ -754,7 +754,10 @@ public:
     int Unset( T *pKey )
     {   iterator it = m_lstSub.find( pKey );
         if ( m_lstSub.end() != it ) 
-            m_lstSub.erase( it ); 
+            m_lstSub.erase( it );
+		else
+			return 0;
+		return 1;
     }
 
 public:
@@ -870,7 +873,7 @@ template < typename T_IN >
             // Binary conversion, preserves all data
             char *p = (char*)&s[ i ];
             for ( unsigned int b = 0; b < sizeof( T_IN ); b++ )
-                ret += (T_RET)s[ b ];
+                ret += (char)s[ b ];
 
         } // end for
 

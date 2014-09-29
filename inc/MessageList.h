@@ -127,7 +127,7 @@ public:
 	
 		\see 
 	*/
-	GUID* CreateKey( GUID* pKey, DWORD dwUser1, DWORD dwUser2, const GUID *pguid )
+	GUID* CreateKey( GUID* pKey, void* dwUser1, void* dwUser2, const GUID *pguid )
 	{	MD5_CTX ctx;
 		CMd5Rsa::MD5Init( &ctx );
 		CMd5Rsa::MD5Update( &ctx, (LPBYTE)&dwUser1, sizeof( dwUser1 ) );
@@ -162,7 +162,7 @@ public:
 		if ( !ll.IsLocked() ) return;
 		
 		if ( hWnd != NULL && uWMMessageID && ::IsWindow( hWnd ) )			
-		{	GUID guid; CreateKey( &guid, (DWORD)hWnd, (DWORD)uWMMessageID, pguid );
+		{	GUID guid; CreateKey( &guid, hWnd, (void*)uWMMessageID, pguid );
 			m_vMsgTargetQueue.erase( guid );
 			m_vMsgTargetQueue.push_back( guid, _PTR_NEW CMsgTarget( hWnd, uWMMessageID, bPost, 1, pguid ) );
 		} // end if
@@ -185,7 +185,7 @@ public:
 		if ( !ll.IsLocked() ) return;
 
         if ( hWnd != NULL && uWMMessageID && ::IsWindow( hWnd ) )			
-		{	GUID guid; CreateKey( &guid, (DWORD)hWnd, (DWORD)uWMMessageID, pguid );
+		{	GUID guid; CreateKey( &guid, hWnd, (void*)uWMMessageID, pguid );
 			m_vMsgTargetQueue.erase( guid );
 			m_vMsgTargetQueue.push_back( guid, _PTR_NEW CMsgTarget( hWnd, uWMMessageID, 0, 2, pguid ) );
 		} // end if
@@ -416,7 +416,7 @@ public:
 		if ( !ll.IsLocked() ) return FALSE;
 		
 		if ( pFunction != NULL )			
-		{	GUID guid; CreateKey( &guid, (DWORD)pFunction, (DWORD)pData, pguid );
+		{	GUID guid; CreateKey( &guid, (void*)pFunction, pData, pguid );
 			m_vCallbackTargetQueue.erase( guid );
 			m_vCallbackTargetQueue.push_back( guid, _PTR_NEW CCallbackTarget( pFunction, NULL, pData, 1, pguid ) ); 
 		} // end if
@@ -443,7 +443,7 @@ public:
 		if ( !ll.IsLocked() ) return FALSE;
 		
 		if ( pFunction != NULL )			
-		{	GUID guid; CreateKey( &guid, (DWORD)pFunction, (DWORD)pData, pguid );
+		{	GUID guid; CreateKey( &guid, (void*)pFunction, pData, pguid );
 			m_vCallbackTargetQueue.erase( guid );
 			m_vCallbackTargetQueue.push_back( guid, _PTR_NEW CCallbackTarget( NULL, pFunction, pData, 1, pguid ) ); 
 		} // end if
@@ -512,7 +512,7 @@ public:
 		if ( !ll.IsLocked() ) return;
 		
 		if ( pFunction != NULL )			
-		{	GUID guid; CreateKey( &guid, (DWORD)pFunction, (DWORD)pData, pguid );
+		{	GUID guid; CreateKey( &guid, (void*)pFunction, pData, pguid );
 			m_vCallbackTargetQueue.erase( guid );
 			m_vCallbackTargetQueue.push_back( guid, _PTR_NEW CCallbackTarget( pFunction, NULL, pData, 2, pguid ) ); 
 		} // end if
@@ -541,7 +541,7 @@ public:
 		if ( !ll.IsLocked() ) return;
 		
 		if ( pFunction != NULL )			
-		{	GUID guid; CreateKey( &guid, (DWORD)pFunction, (DWORD)pData, pguid );
+		{	GUID guid; CreateKey( &guid, (void*)pFunction, pData, pguid );
 			m_vCallbackTargetQueue.erase( guid );
 			m_vCallbackTargetQueue.push_back( guid, _PTR_NEW CCallbackTarget( NULL, pFunction, pData, 2, pguid ) ); 
 		} // end if

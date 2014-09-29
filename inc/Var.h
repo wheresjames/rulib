@@ -321,7 +321,7 @@ public:
 		if ( pv == NULL ) return dwDef;
 		if ( pv->type == VAR_STR ) return strtoul( (char*)pv->val, NULL, 10 );
 		else if ( pv->type != VAR_DWORD ) return dwDef;
-		return (DWORD)pv->val;
+		return RUPTR2DW(pv->val);
 	}
 
 	//==============================================================
@@ -357,7 +357,7 @@ public:
 		if ( pv == NULL ) return FALSE;
 		if ( pv->type == VAR_STR ) *pdwVal = strtoul( (char*)pv->val, NULL, 10 );
 		else if ( pv->type == VAR_DWORD || pv->type == VAR_VOID ) 
-			*pdwVal = (DWORD)pv->val;
+			*pdwVal = RUPTR2DW(pv->val);
 		else return FALSE;
 		return TRUE;
 	}
@@ -379,7 +379,7 @@ public:
 		if ( pv == NULL ) return lDef;
 		if ( pv->type == VAR_STR ) return strtoul( (char*)pv->val, NULL, 10 );
 		else if ( pv->type != VAR_DWORD ) return lDef;
-		return (LONG)pv->val;
+		return (LONG)RUPTR2INT(pv->val);
 	}
 
 	//==============================================================
@@ -415,7 +415,7 @@ public:
 		if ( pv == NULL ) return FALSE;
 		if ( pv->type == VAR_STR ) *plVal = strtoul( (char*)pv->val, NULL, 10 );
 		else if ( pv->type == VAR_DWORD || pv->type == VAR_VOID ) 
-			*plVal = (LONG)pv->val;
+			*plVal = (LONG)RUPTR2INT(pv->val);
 		else return FALSE;
 		return TRUE;
 	}

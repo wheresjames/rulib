@@ -23,6 +23,8 @@
 //
 //////////////////////////////////////////////////////////////////////
 
+#if !defined( __GNUC__ )
+
 #include "stdafx.h"
 
 //////////////////////////////////////////////////////////////////////
@@ -120,53 +122,53 @@ BOOL CXpTheme::LoadFunctionPointers()
 {_STT();
 	if ( m_hModule == NULL ) return FALSE;
 
-	m_ixptf[ ixptf_PFNOPENTHEMEDATA ] = GetProcAddress( m_hModule, "OpenThemeData" );
-	m_ixptf[ ixptf_PFNCLOSETHEMEDATA ] = GetProcAddress( m_hModule, "CloseThemeData" );
-	m_ixptf[ ixptf_PFNDRAWTHEMEBACKGROUND ] = GetProcAddress( m_hModule, "DrawThemeBackground" );
-	m_ixptf[ ixptf_PFNDRAWTHEMETEXT ] = GetProcAddress( m_hModule, "DrawThemeText" );
-	m_ixptf[ ixptf_PFNGETTHEMEBACKGROUNDCONTENTRECT ] = GetProcAddress( m_hModule, "GetThemeBackgroundContentRect" );
-	m_ixptf[ ixptf_PFNGETTHEMEBACKGROUNDEXTENT ] = GetProcAddress( m_hModule, "GetThemeBackgroundExtent" );
-	m_ixptf[ ixptf_PFNGETTHEMEPARTSIZE ] = GetProcAddress( m_hModule, "GetThemePartSize" );
-	m_ixptf[ ixptf_PFNGETTHEMETEXTEXTENT ] = GetProcAddress( m_hModule, "GetThemeTextExtent" );
-	m_ixptf[ ixptf_PFNGETTHEMETEXTMETRICS ] = GetProcAddress( m_hModule, "GetThemeTextMetrics" );
-	m_ixptf[ ixptf_PFNGETTHEMEBACKGROUNDREGION ] = GetProcAddress( m_hModule, "GetThemeTextMetrics" );
-	m_ixptf[ ixptf_PFNHITTESTTHEMEBACKGROUND ] = GetProcAddress( m_hModule, "HitTestThemeBackground" );
-	m_ixptf[ ixptf_PFNDRAWTHEMEEDGE ] = GetProcAddress( m_hModule, "DrawThemeEdge" );
-	m_ixptf[ ixptf_PFNDRAWTHEMEICON ] = GetProcAddress( m_hModule, "DrawThemeIcon" );
-	m_ixptf[ ixptf_PFNISTHEMEPARTDEFINED ] = GetProcAddress( m_hModule, "IsThemePartDefined" );
-	m_ixptf[ ixptf_PFNISTHEMEBACKGROUNDPARTIALLYTRANSPARENT ] = GetProcAddress( m_hModule, "IsThemeBackgroundPartiallyTransparent" );
-	m_ixptf[ ixptf_PFNGETTHEMECOLOR ] = GetProcAddress( m_hModule, "GetThemeColor" );
-	m_ixptf[ ixptf_PFNGETTHEMEMETRIC ] = GetProcAddress( m_hModule, "GetThemeMetric" );
-	m_ixptf[ ixptf_PFNGETTHEMESTRING ] = GetProcAddress( m_hModule, "GetThemeString" );
-	m_ixptf[ ixptf_PFNGETTHEMEBOOL ] = GetProcAddress( m_hModule, "GetThemeBool" );
-	m_ixptf[ ixptf_PFNGETTHEMEINT ] = GetProcAddress( m_hModule, "GetThemeInt" );
-	m_ixptf[ ixptf_PFNGETTHEMEENUMVALUE ] = GetProcAddress( m_hModule, "GetThemeEnumValue" );
-	m_ixptf[ ixptf_PFNGETTHEMEPOSITION ] = GetProcAddress( m_hModule, "GetThemePosition" );
-	m_ixptf[ ixptf_PFNGETTHEMEFONT ] = GetProcAddress( m_hModule, "GetThemeFont" );
-	m_ixptf[ ixptf_PFNGETTHEMERECT ] = GetProcAddress( m_hModule, "GetThemeRect" );
-	m_ixptf[ ixptf_PFNGETTHEMEMARGINS ] = GetProcAddress( m_hModule, "GetThemeMargins" );
-	m_ixptf[ ixptf_PFNGETTHEMEINTLIST ] = GetProcAddress( m_hModule, "GetThemeIntList" );
-	m_ixptf[ ixptf_PFNGETTHEMEPROPERTYORIGIN ] = GetProcAddress( m_hModule, "GetThemePropertyOrigin" );
-	m_ixptf[ ixptf_PFNSETWINDOWTHEME ] = GetProcAddress( m_hModule, "SetWindowTheme" );
-	m_ixptf[ ixptf_PFNGETTHEMEFILENAME ] = GetProcAddress( m_hModule, "GetThemeFilename" );
-	m_ixptf[ ixptf_PFNGETTHEMESYSCOLOR ] = GetProcAddress( m_hModule, "GetThemeSysColor" );
-	m_ixptf[ ixptf_PFNGETTHEMESYSCOLORBRUSH ] = GetProcAddress( m_hModule, "GetThemeSysColorBrush" );
-	m_ixptf[ ixptf_PFNGETTHEMESYSBOOL ] = GetProcAddress( m_hModule, "GetThemeSysBool" );
-	m_ixptf[ ixptf_PFNGETTHEMESYSSIZE ] = GetProcAddress( m_hModule, "GetThemeSysSize" );
-	m_ixptf[ ixptf_PFNGETTHEMESYSFONT ] = GetProcAddress( m_hModule, "GetThemeSysFont" );
-	m_ixptf[ ixptf_PFNGETTHEMESYSSTRING ] = GetProcAddress( m_hModule, "GetThemeSysString" );
-	m_ixptf[ ixptf_PFNGETTHEMESYSINT ] = GetProcAddress( m_hModule, "GetThemeSysInt" );
-	m_ixptf[ ixptf_PFNISTHEMEACTIVE ] = GetProcAddress( m_hModule, "IsThemeActive" );
-	m_ixptf[ ixptf_PFNISAPPTHEMED ] = GetProcAddress( m_hModule, "IsAppThemed" );
-	m_ixptf[ ixptf_PFNGETWINDOWTHEME ] = GetProcAddress( m_hModule, "GetWindowTheme" );
-	m_ixptf[ ixptf_PFNENABLETHEMEDIALOGTEXTURE ] = GetProcAddress( m_hModule, "EnableThemeDialogTexture" );
-	m_ixptf[ ixptf_PFNISTHEMEDIALOGTEXTUREENABLED ] = GetProcAddress( m_hModule, "IsThemeDialogTextureEnabled" );
-	m_ixptf[ ixptf_PFNGETTHEMEAPPPROPERTIES ] = GetProcAddress( m_hModule, "GetThemeAppProperties" );
-	m_ixptf[ ixptf_PFNSETTHEMEAPPPROPERTIES ] = GetProcAddress( m_hModule, "SetThemeAppProperties" );
-	m_ixptf[ ixptf_PFNGETCURRENTTHEMENAME ] = GetProcAddress( m_hModule, "GetCurrentThemeName" );
-	m_ixptf[ ixptf_PFNGETTHEMEDOCUMENTATIONPROPERTY ] = GetProcAddress( m_hModule, "GetThemeDocumentationProperty" );
-	m_ixptf[ ixptf_PFNDRAWTHEMEPARENTBACKGROUND ] = GetProcAddress( m_hModule, "DrawThemeParentBackground" );
-	m_ixptf[ ixptf_PFNENABLETHEMING ] = GetProcAddress( m_hModule, "EnableTheming" );
+	m_ixptf[ ixptf_PFNOPENTHEMEDATA ] = (void*)GetProcAddress( m_hModule, "OpenThemeData" );
+	m_ixptf[ ixptf_PFNCLOSETHEMEDATA ] = (void*)GetProcAddress( m_hModule, "CloseThemeData" );
+	m_ixptf[ ixptf_PFNDRAWTHEMEBACKGROUND ] = (void*)GetProcAddress( m_hModule, "DrawThemeBackground" );
+	m_ixptf[ ixptf_PFNDRAWTHEMETEXT ] = (void*)GetProcAddress( m_hModule, "DrawThemeText" );
+	m_ixptf[ ixptf_PFNGETTHEMEBACKGROUNDCONTENTRECT ] = (void*)GetProcAddress( m_hModule, "GetThemeBackgroundContentRect" );
+	m_ixptf[ ixptf_PFNGETTHEMEBACKGROUNDEXTENT ] = (void*)GetProcAddress( m_hModule, "GetThemeBackgroundExtent" );
+	m_ixptf[ ixptf_PFNGETTHEMEPARTSIZE ] = (void*)GetProcAddress( m_hModule, "GetThemePartSize" );
+	m_ixptf[ ixptf_PFNGETTHEMETEXTEXTENT ] = (void*)GetProcAddress( m_hModule, "GetThemeTextExtent" );
+	m_ixptf[ ixptf_PFNGETTHEMETEXTMETRICS ] = (void*)GetProcAddress( m_hModule, "GetThemeTextMetrics" );
+	m_ixptf[ ixptf_PFNGETTHEMEBACKGROUNDREGION ] = (void*)GetProcAddress( m_hModule, "GetThemeTextMetrics" );
+	m_ixptf[ ixptf_PFNHITTESTTHEMEBACKGROUND ] = (void*)GetProcAddress( m_hModule, "HitTestThemeBackground" );
+	m_ixptf[ ixptf_PFNDRAWTHEMEEDGE ] = (void*)GetProcAddress( m_hModule, "DrawThemeEdge" );
+	m_ixptf[ ixptf_PFNDRAWTHEMEICON ] = (void*)GetProcAddress( m_hModule, "DrawThemeIcon" );
+	m_ixptf[ ixptf_PFNISTHEMEPARTDEFINED ] = (void*)GetProcAddress( m_hModule, "IsThemePartDefined" );
+	m_ixptf[ ixptf_PFNISTHEMEBACKGROUNDPARTIALLYTRANSPARENT ] = (void*)GetProcAddress( m_hModule, "IsThemeBackgroundPartiallyTransparent" );
+	m_ixptf[ ixptf_PFNGETTHEMECOLOR ] = (void*)GetProcAddress( m_hModule, "GetThemeColor" );
+	m_ixptf[ ixptf_PFNGETTHEMEMETRIC ] = (void*)GetProcAddress( m_hModule, "GetThemeMetric" );
+	m_ixptf[ ixptf_PFNGETTHEMESTRING ] = (void*)GetProcAddress( m_hModule, "GetThemeString" );
+	m_ixptf[ ixptf_PFNGETTHEMEBOOL ] = (void*)GetProcAddress( m_hModule, "GetThemeBool" );
+	m_ixptf[ ixptf_PFNGETTHEMEINT ] = (void*)GetProcAddress( m_hModule, "GetThemeInt" );
+	m_ixptf[ ixptf_PFNGETTHEMEENUMVALUE ] = (void*)GetProcAddress( m_hModule, "GetThemeEnumValue" );
+	m_ixptf[ ixptf_PFNGETTHEMEPOSITION ] = (void*)GetProcAddress( m_hModule, "GetThemePosition" );
+	m_ixptf[ ixptf_PFNGETTHEMEFONT ] = (void*)GetProcAddress( m_hModule, "GetThemeFont" );
+	m_ixptf[ ixptf_PFNGETTHEMERECT ] = (void*)GetProcAddress( m_hModule, "GetThemeRect" );
+	m_ixptf[ ixptf_PFNGETTHEMEMARGINS ] = (void*)GetProcAddress( m_hModule, "GetThemeMargins" );
+	m_ixptf[ ixptf_PFNGETTHEMEINTLIST ] = (void*)GetProcAddress( m_hModule, "GetThemeIntList" );
+	m_ixptf[ ixptf_PFNGETTHEMEPROPERTYORIGIN ] = (void*)GetProcAddress( m_hModule, "GetThemePropertyOrigin" );
+	m_ixptf[ ixptf_PFNSETWINDOWTHEME ] = (void*)GetProcAddress( m_hModule, "SetWindowTheme" );
+	m_ixptf[ ixptf_PFNGETTHEMEFILENAME ] = (void*)GetProcAddress( m_hModule, "GetThemeFilename" );
+	m_ixptf[ ixptf_PFNGETTHEMESYSCOLOR ] = (void*)GetProcAddress( m_hModule, "GetThemeSysColor" );
+	m_ixptf[ ixptf_PFNGETTHEMESYSCOLORBRUSH ] = (void*)GetProcAddress( m_hModule, "GetThemeSysColorBrush" );
+	m_ixptf[ ixptf_PFNGETTHEMESYSBOOL ] = (void*)GetProcAddress( m_hModule, "GetThemeSysBool" );
+	m_ixptf[ ixptf_PFNGETTHEMESYSSIZE ] = (void*)GetProcAddress( m_hModule, "GetThemeSysSize" );
+	m_ixptf[ ixptf_PFNGETTHEMESYSFONT ] = (void*)GetProcAddress( m_hModule, "GetThemeSysFont" );
+	m_ixptf[ ixptf_PFNGETTHEMESYSSTRING ] = (void*)GetProcAddress( m_hModule, "GetThemeSysString" );
+	m_ixptf[ ixptf_PFNGETTHEMESYSINT ] = (void*)GetProcAddress( m_hModule, "GetThemeSysInt" );
+	m_ixptf[ ixptf_PFNISTHEMEACTIVE ] = (void*)GetProcAddress( m_hModule, "IsThemeActive" );
+	m_ixptf[ ixptf_PFNISAPPTHEMED ] = (void*)GetProcAddress( m_hModule, "IsAppThemed" );
+	m_ixptf[ ixptf_PFNGETWINDOWTHEME ] = (void*)GetProcAddress( m_hModule, "GetWindowTheme" );
+	m_ixptf[ ixptf_PFNENABLETHEMEDIALOGTEXTURE ] = (void*)GetProcAddress( m_hModule, "EnableThemeDialogTexture" );
+	m_ixptf[ ixptf_PFNISTHEMEDIALOGTEXTUREENABLED ] = (void*)GetProcAddress( m_hModule, "IsThemeDialogTextureEnabled" );
+	m_ixptf[ ixptf_PFNGETTHEMEAPPPROPERTIES ] = (void*)GetProcAddress( m_hModule, "GetThemeAppProperties" );
+	m_ixptf[ ixptf_PFNSETTHEMEAPPPROPERTIES ] = (void*)GetProcAddress( m_hModule, "SetThemeAppProperties" );
+	m_ixptf[ ixptf_PFNGETCURRENTTHEMENAME ] = (void*)GetProcAddress( m_hModule, "GetCurrentThemeName" );
+	m_ixptf[ ixptf_PFNGETTHEMEDOCUMENTATIONPROPERTY ] = (void*)GetProcAddress( m_hModule, "GetThemeDocumentationProperty" );
+	m_ixptf[ ixptf_PFNDRAWTHEMEPARENTBACKGROUND ] = (void*)GetProcAddress( m_hModule, "DrawThemeParentBackground" );
+	m_ixptf[ ixptf_PFNENABLETHEMING ] = (void*)GetProcAddress( m_hModule, "EnableTheming" );
 
 	return TRUE;
 }
@@ -178,8 +180,12 @@ BOOL CXpTheme::Open( HWND hwnd, LPCTSTR pszClassList )
 
 	PFNOPENTHEMEDATA pf = (PFNOPENTHEMEDATA)m_ixptf[ ixptf_PFNOPENTHEMEDATA ];
 	if ( pf == NULL ) return FALSE;
+#if defined( OEX_MSC )
 	m_hTheme = pf( hwnd, CComBSTR( pszClassList ) );
 	if ( m_hTheme == NULL ) return FALSE;
+#else
+	return FALSE;
+#endif
 
 	m_bReleaseTheme = TRUE;
 
@@ -231,7 +237,11 @@ BOOL CXpTheme::DrawThemeText(HDC hDC, int iPartId, int iStateId, LPCTSTR pszText
 	if ( pf == NULL ) return FALSE;
 
 	// Do the call
+#if defined( OEX_MSC )
 	return SetErr( pf( m_hTheme, hDC, iPartId, iStateId, CComBSTR( pszText ), iCharCount, dwTextFlags, dwTextFlags2, pRect ) ) == S_OK;
+#else
+	return FALSE;
+#endif
 }
 
 typedef HRESULT (__stdcall *PFNGETTHEMEBACKGROUNDCONTENTRECT)(HTHEME hTheme,  HDC hdc, int iPartId, int iStateId,  const RECT *pBoundingRect, RECT *pContentRect);
@@ -844,3 +854,5 @@ BOOL CXpTheme::IsWindowThemed(HWND hWnd)
 	CXpTheme xpthm( hWnd, "WINDOW" );
 	return xpthm.IsTheme();
 }
+
+#endif

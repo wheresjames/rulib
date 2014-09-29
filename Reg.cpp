@@ -800,7 +800,9 @@ BOOL CReg::Save( CScsPropertyBag *pPb )
 
 BOOL CReg::SaveRegFile(LPCTSTR pFile, LPCTSTR pKey, LPCTSTR pHeader)
 {_STTEX();
-	return SaveRegFile( CPFile( pFile, pKey, GENERIC_WRITE, TRUE ), pKey, pHeader );
+	
+	CPFile pf( pFile, pKey, GENERIC_WRITE, TRUE );
+	return SaveRegFile( pf, pKey, pHeader );
 }
 
 

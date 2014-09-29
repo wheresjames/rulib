@@ -264,7 +264,7 @@ private:
 
 /*
 
-/*  PIDTYPE     m_fKp;
+/ * PIDTYPE     m_fKp;
     PIDTYPE     m_fTi;
     PIDTYPE     m_fTs;
     PIDTYPE     m_fIntegral;

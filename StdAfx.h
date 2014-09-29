@@ -28,8 +28,10 @@
 #define AFX_STDAFX_H__736428F5_60C1_48EB_9BBA_1C4573198A61__INCLUDED_
 
 //+++ Ignore depreciated functions for now...
+#if !defined( __GNUC__ )
 #pragma warning( disable : 4995 )
 #pragma warning( disable : 4996 )
+#endif
 
 #if _MSC_VER > 1000
 #pragma once
@@ -61,12 +63,14 @@
 
 #define DEBUG_NEW new
 
+#if defined( _MSC_VER )
 #include "comdef.h"
 #include "comptr.h"
+#endif
 
 /// Socket 2 interface
 #include <WinSock2.h>
-#pragma comment( lib, "WS2_32.lib" )
+//#pragma comment( lib, "WS2_32.lib" )
 
 #include "inc/rulib.h"
 

@@ -928,11 +928,11 @@ BOOL CRKey::Copy(CCfgFile *pCfg, LPCTSTR pGroup, BOOL bMakeStrings)
 		if ( pcei->type == CFG_DWORD || pcei->size == 0 )
         {
             if ( bMakeStrings )
-            {   sprintf( szNum, "%lu", (UINT)pcei->value );
+            {   sprintf( szNum, "%lu", RUPTR2DW(pcei->value) );
                 Set( pcei->name, szNum );
             } // end if
 
-            else Set( pcei->name, (DWORD)pcei->value );
+            else Set( pcei->name, RUPTR2DW(pcei->value) );
 
         } // end if
 

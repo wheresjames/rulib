@@ -93,7 +93,7 @@ BOOL CClientDde::Connect(LPCTSTR pService, LPCTSTR pTopic)
 	} // end if
 
 	// Set the class pointer
-	DdeSetUserHandle( m_hConv, QID_SYNC, (DWORD)this );
+	DdeSetUserHandle( m_hConv, QID_SYNC, RUPTR2DW(this) );
 
 	return TRUE;
 }

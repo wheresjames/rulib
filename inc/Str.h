@@ -118,7 +118,7 @@ public:
 		\see 
 	*/
 	char* str( unsigned long offset = 0 ) 
-	{	if ( ptr() == NULL ) return ""; 
+	{	if ( ptr() == NULL ) return (char*)""; 
 		if ( offset > strlen() ) offset = strlen(); return ptr( offset ); 
 	}
 	
@@ -192,6 +192,12 @@ public:
 	//==============================================================
 	/// Appends string value of long
 	CStr& operator += ( long n );
+
+	//==============================================================
+	// operator +=()
+	//==============================================================
+	/// Appends value of string
+	CStr& operator += ( CStr &str );
 
 	//==============================================================
 	// operator +=()

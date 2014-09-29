@@ -228,7 +228,9 @@
 #   pragma warning( disable : 1786 )
 #endif
 
-#include <WinInet.h>
+//#ifdef RULIB_INCS
+
+#include <Wininet.h>
 #include <commdlg.h>
 #include <StdIO.h>
 #include <ShellApi.h>
@@ -236,6 +238,8 @@
 #include <math.h>
 #include <string>
 #include <vector>
+
+//#endif
 
 // This only works if your paths match the above mentioned structure
 #ifdef RULIB_LIBS
@@ -322,6 +326,15 @@
 #else
 #define RULIB_TRY			if ( 1 )
 #define RULIB_CATCH_ALL		else if ( 0 )
+#endif
+
+
+#if defined( _WIN64 )
+#define RUPTR2DW(p)		((DWORD)(unsigned long long)p)
+#define RUPTR2INT(p)	((long long)p)
+#else
+#define RUPTR2DW(p) 	((DWORD)p)
+#define RUPTR2INT(p)	((LONG)p)
 #endif
 
 /*******************************************************************
@@ -754,7 +767,9 @@
 /*******************************************************************
 // CWinDropTarget - The easy way to make a window a drop target
 *******************************************************************/
+#if defined( _MSC_VER )
 #include "WinDropTarget.h"
+#endif
 
 #ifdef ENABLE_WINIMAGE
 
@@ -785,4 +800,4 @@
 *******************************************************************/
 #include "SqExe.h"
 
-#endif RULIB_2002_12_12_INCLUDED
+#endif // RULIB_2002_12_12_INCLUDED

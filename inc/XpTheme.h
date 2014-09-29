@@ -26,6 +26,8 @@
 #if !defined(AFX_XPTHEME_H__DBB25F77_FB59_4672_8D95_E01888CDC388__INCLUDED_)
 #define AFX_XPTHEME_H__DBB25F77_FB59_4672_8D95_E01888CDC388__INCLUDED_
 
+#if !defined( __GNUC__ )
+
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
@@ -195,5 +197,7 @@ private:
 	static void*		m_ixptf[ ixptf_PFNSIZE ];
 
 };
+
+#endif // !defined( __GNUC__ )
 
 #endif // !defined(AFX_XPTHEME_H__DBB25F77_FB59_4672_8D95_E01888CDC388__INCLUDED_)

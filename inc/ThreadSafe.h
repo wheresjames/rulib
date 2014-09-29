@@ -136,7 +136,7 @@ public:
 	// islocked()
 	//==============================================================
 	/// Returns non zero if lock is acquired
-	BOOL islocked() { return aquire( 0 ); }
+	BOOL islocked() { return acquire( 0 ); }
 
 	// Read value
 	operator T()
@@ -293,7 +293,7 @@ public:
 	{	m_bLocked = ( WAIT_OBJECT_0 == WaitForSingleObject( m_hMutex, timeout ) );
 		if ( m_bLocked ) m_dwRef++; 
 		else 
-        {   /* ASSERT( 0 ); */ TRACE( _T( "Lock Failed!\n" ) ); }
+        {   /* ASSERT( 0 ); */ /* TRACE( _T( "Lock Failed!\n" ) ); */ }
 		return m_bLocked; 
 	}
 

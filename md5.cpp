@@ -372,10 +372,10 @@ void CMD5::Random(LPVOID buf, DWORD size)
 	DWORD procid = GetCurrentProcessId();		// 8-bits
 	DWORD thread = GetCurrentThreadId();		// 8-bits
 
-	DWORD memory = (DWORD)this;					// 16-bits
+	DWORD memory = (DWORD)RUPTR2DW(this);		// 16-bits
 	char *ptr = new char[ 16 ];					// 16-bits
 	if ( ptr != NULL ) delete [] ptr;
-	memory ^= (DWORD)ptr;
+	memory ^= RUPTR2DW(ptr);
 												// +- 1 hour
 	DWORD tickcount = GetTickCount();			// 21-bits
 

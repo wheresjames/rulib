@@ -92,7 +92,7 @@ BOOL CResType::Enum(LPCTSTR pFile, LPCTSTR pType, DWORD max)
 	m_dwMaxEnum = max;
 
 	// Enum the resources
-	return EnumResourceNames( m_hModule, pType, CResType::EnumResNameProc, (LONG)this );
+	return EnumResourceNames( m_hModule, pType, CResType::EnumResNameProc, (LONG)RUPTR2INT(this) );
 }
 
 BOOL CResType::Enum(HMODULE hMod, LPCTSTR pType, DWORD max)
@@ -111,7 +111,7 @@ BOOL CResType::Enum(HMODULE hMod, LPCTSTR pType, DWORD max)
 	m_dwMaxEnum = max;
 
 	// Enum the resources
-	return EnumResourceNames( hMod, pType, CResType::EnumResNameProc, (LONG)this );
+	return EnumResourceNames( hMod, pType, CResType::EnumResNameProc, (LONG)RUPTR2INT(this) );
 }
 
 BOOL CResType::OnEnum(HMODULE hModule, LPCTSTR pType, LPCTSTR pName)

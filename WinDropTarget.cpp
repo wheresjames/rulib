@@ -23,6 +23,8 @@
 //
 //////////////////////////////////////////////////////////////////////
 
+#if defined( _MSC_VER )
+
 #include "stdafx.h"
 
 #ifdef _DEBUG
@@ -246,3 +248,5 @@ BOOL CWinDropTarget::GetData(IDataObject *pDo, UINT uClipboardFormat, TMem< BYTE
 
 	return TRUE;
 }
+
+#endif // _MSC_VER

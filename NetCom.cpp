@@ -125,7 +125,6 @@ BOOL CNetCom::OnRx()
 	return MMessage( m_msg.dwFunction, (LPARAM)this, &m_conn.addrNext.guidClass );
 }
 	 
-
 BOOL CNetCom::GetParams(CReg *pParams, GUID *pGuid)
 {_STT();
 	if ( pParams == NULL ) return FALSE;
@@ -137,6 +136,7 @@ BOOL CNetCom::GetParams(CReg *pParams, GUID *pGuid)
 		if (	buf.allocate( dwParams ) &&
 				m_prx->ReadPacketData( 0, NETMSGDT_PARAMS, buf.ptr(), buf.size() ) )
 			pParams->LoadRegFromMem( buf, buf.size() );
+			
 	} // end if
 
 	// Get the hash for these params

@@ -784,7 +784,7 @@ BOOL CMime::GenBoundry(LPSTR pBoundry)
 	GetLocalTime( &st );
 
 	// Get random hash
-	md5.Random( "Mime (October 4, 2002)" );
+	md5.Random( (void*)"Mime (October 4, 2002)" );
 
 	wsprintf( pBoundry, "----_=_NextPart_%03lX_%04lX_%08lX.%08lX.%08lX%08lX",
 				m_dwCounter++, 
@@ -824,7 +824,7 @@ LPMIMEBLOCK CMime::Create( LPCTSTR pTo, LPCTSTR pFrom, LPCTSTR pSubject )
 	{	TMem< char > buf;
 		if ( buf.allocate( ( strlen( pFrom ) * 2 ) + 1 ) )
 		{	VerifyEmailList( buf, pFrom, ",\r\n\t" ); 
-			m_header->var.AddVar( "From", buf );
+			m_header->var.AddVar( "From", buf.ptr() );
 		} // end if
 	} // end if
 
@@ -833,7 +833,7 @@ LPMIMEBLOCK CMime::Create( LPCTSTR pTo, LPCTSTR pFrom, LPCTSTR pSubject )
 	{	TMem< char > buf;
 		if ( buf.allocate( ( strlen( pTo ) * 2 ) + 1 ) )
 		{	VerifyEmailList( buf, pTo, ",\r\n\t" ); 
-			m_header->var.AddVar( "To", buf );
+			m_header->var.AddVar( "To", buf.ptr() );
 		} // end if
 	} // end if
 
@@ -1023,7 +1023,7 @@ DWORD CMime::SaveBlock( LPMIMEBLOCK pmb, LPBYTE buf, DWORD size)
 		if ( pvar->size == 0 )
 		{
 			char num[ MIME_STRSIZE ];
-			wsprintf( num, "%lu", (DWORD)pvar->val );
+			wsprintf( num, "%lu", RUPTR2INT(pvar->val) );
 			if ( buf != NULL ) strcpy( (char*)&buf[ i ], num );
 			i += strlen( num );
 		} // end if

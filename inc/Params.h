@@ -344,7 +344,7 @@ public:
 	
 		\see 
 	*/
-	BOOL _cdecl SetParams( HPARAM hParam, ... );
+	BOOL SetParams( HPARAM hParam, ... );
 	
 	//==============================================================
 	// GetParams()
@@ -361,7 +361,7 @@ public:
 	
 		\see 
 	*/
-	BOOL _cdecl GetParams( HPARAM hParam, ... );
+	BOOL GetParams( HPARAM hParam, ... );
 
 	//==============================================================
 	// Load()
@@ -431,7 +431,7 @@ public:
 	
 		\see 
 	*/
-	LPCTSTR CParams::GetName(HPARAM hParam, DWORD i)
+	LPCTSTR GetName(HPARAM hParam, DWORD i)
 	{	if ( hParam == NULL || i >= hParam->n ) return "";
 		return hParam->param[ i ].name;
 	}
@@ -448,7 +448,7 @@ public:
 	
 		\see 
 	*/
-	double CParams::GetMin(HPARAM hParam, DWORD i)
+	double GetMin(HPARAM hParam, DWORD i)
 	{	if ( hParam == NULL || i >= hParam->n ) return (double)0;
 		if ( hParam->param[ i ].pmin[ 0 ] == '%' )
 			return Replace( &hParam->param[ i ].pmin[ 1 ] );
@@ -467,7 +467,7 @@ public:
 	
 		\see 
 	*/
-	double CParams::GetMax(HPARAM hParam, DWORD i)
+	double GetMax(HPARAM hParam, DWORD i)
 	{	if ( hParam == NULL || i >= hParam->n ) return (double)0;
 		if ( hParam->param[ i ].pmax[ 0 ] == '%' )
 			return Replace( &hParam->param[ i ].pmax[ 1 ] );
@@ -486,7 +486,7 @@ public:
 	
 		\see 
 	*/
-	double CParams::GetDef(HPARAM hParam, DWORD i)
+	double GetDef(HPARAM hParam, DWORD i)
 	{	if ( hParam == NULL || i >= hParam->n ) return (double)0;
 		if ( hParam->param[ i ].pdef[ 0 ] == '%' )
 			return Replace( &hParam->param[ i ].pdef[ 1 ] );
@@ -514,7 +514,7 @@ public:
 	
 		\see 
 	*/
-	double CParams::GetStep(HPARAM hParam, DWORD i)
+	double GetStep(HPARAM hParam, DWORD i)
 	{	if ( hParam == NULL || i >= hParam->n ) return (double)0;
 		if ( hParam->param[ i ].pstep[ 0 ] == '%' )
 			return Replace( &hParam->param[ i ].pstep[ 1 ] );

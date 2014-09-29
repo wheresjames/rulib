@@ -499,7 +499,7 @@ LPTASKINFO CTaskList::FindByPid( HMODULE hModule )
 	while ( ( pti = (LPTASKINFO)pTask->GetNext( pti ) ) != NULL )
 	{
 		// Is this the module?
-		if ( (DWORD)pti->dwPid == (DWORD)hModule ) return pti;
+		if ( RUPTR2INT(pti->dwPid) == RUPTR2INT(hModule) ) return pti;
 
 		// Get sub tasks
 //		EnumModules( pti );

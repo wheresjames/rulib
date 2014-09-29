@@ -55,7 +55,7 @@ public:
 	
 		\see 
 	*/
-	THList< GUID, CNetCom>::iterator CNetMgr::RemoveNode( THList< GUID, CNetCom>::iterator itNode );
+	THList< GUID, CNetCom>::iterator RemoveNode( THList< GUID, CNetCom>::iterator itNode );
 
 	//==============================================================
 	// RemoveUpdateNotification()

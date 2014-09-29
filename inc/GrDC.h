@@ -464,7 +464,7 @@ public:
 	
 		\see 
 	*/
-	static HICON CGrDC::CreateIcon(long w, long h, long lSrcW, long lSrcH, COLORREF bck, HDC hDC, HBITMAP hIconBmp, HBITMAP hIconMask);
+	static HICON CreateIcon(long w, long h, long lSrcW, long lSrcH, COLORREF bck, HDC hDC, HBITMAP hIconBmp, HBITMAP hIconMask);
 	
 	//==============================================================
 	// PtInPolygon()

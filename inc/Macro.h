@@ -74,10 +74,9 @@ static const GUID CLSID_ZERO =
 #define SWAP_INT( a, b ) ( a ^= b, b ^= a, a ^= b )
 #define R_SWAP( a, b ) 
 
-//#define strcpy_max( str1, str2, max )	\
-//	{ try{ ZeroMemory( str1, max ), strncpy( str1, str2, max - 1 ), str1[ max - 1 ] = NULL; } catch(...){} }
+//#define strcpy_max( str1, str2, max ) { try{ ZeroMemory( str1, max ), strncpy( str1, str2, max - 1 ), str1[ max - 1 ] = NULL; } catch(...){} }
 static void strcpy_max( LPSTR str1, LPCTSTR str2, DWORD max )
-{ { RULIB_TRY{ strncpy( str1, str2, max - 1 ), str1[ max - 1 ] = NULL; } RULIB_CATCH_ALL{} } }
+{ { RULIB_TRY{ strncpy( str1, str2, max - 1 ), str1[ max - 1 ] = 0; } RULIB_CATCH_ALL{} } }
 #define strcpy_sz( str1, str2 )	strcpy_max( str1, str2, sizeof( str1 ) )
 
 // Sets a bit in DWORD

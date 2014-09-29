@@ -43,7 +43,7 @@ public:
 	static void DeleteStr(LPSTR *pBuf);
 
 	static void* New( DWORD size );
-	static void* CMem::New(DWORD size, BYTE init );
+	static void* New(DWORD size, BYTE init );
 
 };
 

@@ -116,7 +116,7 @@ BOOL CWin32::StartNewApp()
 	GetCurrentDirectory( sizeof( dir ), dir );
 
 	// Restart the app
-	return ( ( (DWORD)ShellExecute( NULL, "open", exe, NULL, dir, SW_SHOWNORMAL ) ) > 32 );
+	return ( ( RUPTR2DW(ShellExecute( NULL, "open", exe, NULL, dir, SW_SHOWNORMAL ) ) ) > 32 );
 }
 
 BOOL CWin32::RunModalLoop(HWND hWnd)

@@ -141,8 +141,8 @@ public:
 	
 		\see 
 	*/
-	HRESULT _cdecl Add(	LPCTSTR pFile, DWORD dwLine, LPCTSTR pFunction,
-						DWORD dwSeverity, DWORD dwErrCode, LPCTSTR pStr, ... );
+	HRESULT Add( LPCTSTR pFile, DWORD dwLine, LPCTSTR pFunction,
+				 DWORD dwSeverity, DWORD dwErrCode, LPCTSTR pStr, ... );
 
 	//==============================================================
 	// Enable()

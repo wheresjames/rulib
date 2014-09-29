@@ -93,6 +93,14 @@ CStr& CStr::operator +=(LPCTSTR str)
 	return *this;
 }
 
+CStr& CStr::operator +=(CStr &str)
+{_STTEX();
+	DWORD end = strlen();
+	if ( grow( str.strlen() + end + 1 ) )
+		strcpy( &( ptr()[ end ] ), str.ptr() );
+	return *this;
+}
+
 CStr& CStr::operator +=(double n)
 {_STTEX();
 	char num[ 32 ];

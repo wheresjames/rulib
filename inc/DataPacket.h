@@ -73,7 +73,7 @@ public:
 		/// The total length of the packet
 		DWORD			dwLength;
 
-		/// Unique ID identifying the start of packet
+		/// Unique ID identifying the type of data
 		DWORD			dwType;
 
 	}; typedef SDataHeader* LPSDataHeader; 
@@ -257,7 +257,7 @@ public:
 	
 		\see 
 	*/
-	BOOL _cdecl WriteMultiPacket( DWORD dwPacketType, DWORD dwBuffers = 0, ... )
+	BOOL WriteMultiPacket( DWORD dwPacketType, DWORD dwBuffers = 0, ... )
 	{	return vWriteMultiPacket( dwPacketType, dwBuffers, ( (LPVOID*)&dwBuffers ) + 1 ); }
 
 	//==============================================================

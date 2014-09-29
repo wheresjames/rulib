@@ -86,11 +86,15 @@
 }
 
 
+#if !defined( LVM_SETEXTENDEDLISTVIEWSTYLE )
 #define LVM_SETEXTENDEDLISTVIEWSTYLE (LVM_FIRST + 54)
+#endif
 #define ListCtrl_SetExtendedListViewStyle(hwndLV, dw)\
 		(DWORD)SNDMSG((hwndLV), LVM_SETEXTENDEDLISTVIEWSTYLE, 0, dw)
 
+#if !defined( LVM_GETEXTENDEDLISTVIEWSTYLE )
 #define LVM_GETEXTENDEDLISTVIEWSTYLE (LVM_FIRST + 55)
+#endif
 #define ListCtrl_GetExtendedListViewStyle(hwndLV)\
 		(DWORD)SNDMSG((hwndLV), LVM_GETEXTENDEDLISTVIEWSTYLE, 0, 0)
 

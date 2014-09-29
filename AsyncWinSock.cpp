@@ -1057,7 +1057,7 @@ DWORD CAsyncWinSock::GetLocalAddress()
 	if ( !gethostname( name, CWF_STRSIZE - 1 ) )
 	{
 		LPHOSTENT he = gethostbyname( name );
-		if ( he != NULL ) return (DWORD)*( he->h_addr_list );
+		if ( he != NULL ) return RUPTR2DW(*( he->h_addr_list ));
 
 	} // end if
 

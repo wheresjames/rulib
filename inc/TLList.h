@@ -150,8 +150,8 @@ public:
 	T* push_back_memcpy( T* node )
 	{	T* pObj = _PTR_NEW T;
 		if ( pObj == NULL ) return NULL;
-		if ( node != NULL ) memcpy( pTli->p, node, sizeof( T ) );
 		LPSTLListInfo pTli = (LPSTLListInfo)New( NULL, (DWORD)pObj );
+		if ( node != NULL ) memcpy( pTli->p, node, sizeof( T ) );
 		if ( pTli == NULL ) { _PTR_DELETE( pObj ); return NULL; }
 		return ( pTli->p = pObj );
 	}

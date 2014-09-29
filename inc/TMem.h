@@ -17,7 +17,7 @@
 // License along with this library; if not, write to the Free 
 // Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, 
 // MA 02111-1307 USA 
-//
+// 
 *******************************************************************/
 #ifndef _TMEM_HEADER_
 #define _TMEM_HEADER_
@@ -74,7 +74,7 @@ public:
 			{	if ( dwSize == 1 ) 
 					delete pData; 
 				else delete [] pData; 
-			} RULIB_CATCH_ALL { TRACE( "delete Failed!!!" ); }
+			} RULIB_CATCH_ALL { }
 		}
 		pData = NULL; dwSize = 0;  
 	}
@@ -102,7 +102,7 @@ public:
 		RULIB_TRY
 		{	if ( size == 1 ) ptr = new T; 
 			else ptr = new T[ size ];
-		} RULIB_CATCH_ALL { TRACE( "new Failed!!!" ); ptr = NULL; }
+		} RULIB_CATCH_ALL { ptr = NULL; }
 
 		// return success status
 		return ptr; 
@@ -535,7 +535,11 @@ public:
 	/// Returns the CRC of the buffer
 	DWORD crc() 
 	{	if ( !pData ) return 0;
+#if !defined( __GNUC__ )
 		return CWinFile::CRC32( 0, (LPBYTE)pData, dwSize * sizeof( T ) ); 
+#else
+		return 0;
+#endif
 	}
 
 protected:
@@ -620,19 +624,19 @@ public:
 	// operator *()
 	//==============================================================
 	/// Returns a reference to the first object
-	T& operator *() { return (T&)*pData; }
+	T& operator *() { return (T&)*TMem< T >::pData; }
 
 	//==============================================================
 	// operator &()
 	//==============================================================
 	/// Returns a pointer to the first object
-	T* operator &() { return (T*)pData; }
+	T* operator &() { return (T*)TMem< T >::pData; }
 
 	//==============================================================
 	// operator ->()
 	//==============================================================
 	/// Differences the first object
-	T* operator ->() { return (T*)pData; }
+	T* operator ->() { return (T*)TMem< T >::pData; }
 
 	//==============================================================
 	// operator =()

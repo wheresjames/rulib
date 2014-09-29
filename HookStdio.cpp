@@ -77,7 +77,7 @@ BOOL CHookStdio::Start( DWORD dwStreamId, DWORD dwBufferSize )
 	{	Stop(); return FALSE; }
 
 	// Associate stream handle
-	int nStream = _open_osfhandle( (long)GetStdHandle( dwStreamId ), 0 );
+	int nStream = _open_osfhandle( RUPTR2INT(GetStdHandle( dwStreamId )), 0 );
 
 	// Associate stream handle
 	FILE* hfStream = _fdopen( nStream, "w" );

@@ -138,9 +138,13 @@ class CAutoReg
 	// **** There is a bug in MSVC++ 5.0 that may cause it to choke on
 	//		these pragmas.  If this happens you'll have to comment them 
 	//		and live with the warnings
+#if !defined( __GNUC__ )
 	#pragma warning( disable : 4284 )
+#endif
 		T* operator ->() { return &val; } 
+#if !defined( __GNUC__ )
 	#pragma warning( default : 4284 )
+#endif
 		// These are supposed to be equal according to Bjarne
 		T* operator *() { return &val; }
 		T& operator &() { return val; }

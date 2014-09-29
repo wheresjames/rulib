@@ -93,7 +93,7 @@ void* CModule::AddFunction(LPCTSTR pFunctionName)
 	void *pf = Addr( pFunctionName );
 	if ( pf != NULL ) return pf;
 
-	pf = GetProcAddress( m_hModule, pFunctionName );
+	pf = (void*)GetProcAddress( m_hModule, pFunctionName );
 	if ( pf == NULL ) return FALSE;
 
 	// Save index

@@ -616,7 +616,7 @@ public:
 		else if ( pcei->type == CFG_STR || pcei->type == CFG_VOID )
 		{	if ( pcei->value != NULL ) return (LPCTSTR)pcei->value; return pDefault; }
 		else if ( pcei->type == CFG_DWORD )
-		{	wsprintf( m_szNum, "%lu", (DWORD)pcei->value ); return m_szNum; }
+		{	wsprintf( m_szNum, "%lu", RUPTR2DW(pcei->value) ); return m_szNum; }
 		else if ( pcei->type == CFG_DOUBLE )
 		{	sprintf( m_szNum, "%f", *( (double*)pcei->value ) ); return m_szNum; }
 		return pDefault;
@@ -927,7 +927,7 @@ public:
 		LPCFGELEMENTINFO pcei = FindElement( hGroup, pName );
 		if ( pcei == NULL ) return FALSE;
 		if ( pcei->type == CFG_DWORD || pcei->size == 0 )
-			*pdwValue = (DWORD)pcei->value;
+			*pdwValue = RUPTR2DW(pcei->value);
 		else
 		{	TCHAR *end;
 			*pdwValue = strtoul( (char*)pcei->value, &end, 10 );
@@ -1009,7 +1009,7 @@ public:
 		LPCFGELEMENTINFO pcei = FindElement( hGroup, pName );
 		if ( pcei == NULL ) return FALSE;
 		if ( pcei->type == CFG_DWORD || pcei->size == 0 )
-			*plValue = (LONG)pcei->value;
+			*plValue = (LONG)RUPTR2INT(pcei->value);
 		else
 		{	char *end;
 			*plValue = strtol( (char*)pcei->value, &end, 10 );

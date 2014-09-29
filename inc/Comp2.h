@@ -319,7 +319,7 @@ public:
 		The file id is used to identify the compressed file	
 	*/
 	void SetFileID( LPCTSTR pID )
-	{ if ( pID == NULL ) *m_szFileID = NULL; else strcpy( m_szFileID, pID ); }
+	{ if ( pID == NULL ) *m_szFileID = 0; else strcpy( m_szFileID, pID ); }
 
 private:
 

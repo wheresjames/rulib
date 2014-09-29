@@ -36,6 +36,8 @@ extern "C" {
  #include "../jpeg/jerror.h"
 }
 
+#if defined( RULIB_CXIMGMEM )
+
 static void* _cximage_malloc( size_t size )
 {
 	return malloc( size );
@@ -62,6 +64,8 @@ extern "C"
 	t_cx_realloc cximage_realloc = _cximage_realloc;
 	t_cx_free cximage_free = _cximage_free;
 };
+
+#endif
 
 //==================================================================
 // CCxCustomImg
@@ -143,7 +147,8 @@ void CWinImg::Destroy()
 	pimg->Destroy();
 
 	// Make it like new
-	pimg->CxImage::CxImage( 0 );
+//	pimg->CxImage::CxImage( 0 );
+	pimg->Destroy();
 
 	// Release encode memory
 	ReleaseEncodeMemory();
@@ -673,7 +678,7 @@ BOOL CWinImg::LoadFromResource(LPCTSTR pResource, LPCTSTR pResType, LPCTSTR pImg
 
 	// Get image object
 	if ( m_pimg == NULL ) return FALSE;
-	CCxCustomImg	*pimg = (CCxCustomImg*)m_pimg;
+//	CCxCustomImg *pimg = (CCxCustomImg*)m_pimg;
 
 	DWORD	size = 0;
 	char	*buf = NULL;
@@ -799,7 +804,7 @@ RGBQUAD CWinImg::GetTransColor()
 DWORD CWinImg::GetBpp()
 {_STT();
 	// Get image object
-	if ( m_pimg == NULL ) return NULL;
+	if ( m_pimg == NULL ) return 0;
 	CCxCustomImg	*pimg = (CCxCustomImg*)m_pimg;
 
 	// Create bitmap
@@ -1460,7 +1465,7 @@ BOOL CWinImg::FillSolid( COLORREF rgb )
 	// Ensure we got the pointer
 	if ( pSrcBits == NULL ) return FALSE;
 
-	UINT rnd = CWinFile::Crc16( (BYTE)( w + h ), 0x7412 );
+//	UINT rnd = CWinFile::Crc16( (BYTE)( w + h ), 0x7412 );
 	for ( long y = 0; y < h; y++ )
 		for ( long x = 0; x < w; x++ )
 		{

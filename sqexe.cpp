@@ -109,8 +109,10 @@ BOOL CSqExe::Init()
         TCHAR szErr[ CWF_STRSIZE ] = _T( "" );
 
         // Format
+#if !defined( __GNUC__ )
         _sntprintf( szErr, sizeof( szErr ), "%s(%lu)\r\n   %s", e.sSource.c_str(), e.uLine, e.sDesc.c_str() );
         szErr[ sizeof( szErr ) - 1 ] = 0;
+#endif
 
         // Save string
         m_sErr = szErr;
@@ -152,8 +154,10 @@ BOOL CSqExe::Start()
         TCHAR szErr[ CWF_STRSIZE ] = _T( "" );
 
         // Format
+#if !defined( __GNUC__ )
         _sntprintf( szErr, sizeof( szErr ), "%s(%lu)\r\n   %s", e.sSource.c_str(), e.uLine, e.sDesc.c_str() );
         szErr[ sizeof( szErr ) - 1 ] = 0;
+#endif
 
         // Save string
         m_sErr = szErr;
@@ -211,8 +215,10 @@ BOOL CSqExe::Load( LPCTSTR pScript, BOOL bFile, BOOL bRelative, BOOL bStart )
         TCHAR szErr[ CWF_STRSIZE ] = _T( "" );
 
         // Format
+#if !defined( __GNUC__ )
         _sntprintf( szErr, sizeof( szErr ), "%s(%lu)\r\n   %s", e.sSource.c_str(), e.uLine, e.sDesc.c_str() );
         szErr[ sizeof( szErr ) - 1 ] = 0;
+#endif
 
         // Save string
         m_sErr = szErr;
@@ -255,8 +261,10 @@ BOOL CSqExe::Run( LPCTSTR pScript )
         TCHAR szErr[ CWF_STRSIZE ] = _T( "" );
 
         // Format
+#if !defined( __GNUC__ )
         _sntprintf( szErr, sizeof( szErr ), "%s(%lu)\r\n   %s", e.sSource.c_str(), e.uLine, e.sDesc.c_str() );
         szErr[ sizeof( szErr ) - 1 ] = 0;
+#endif
 
         // Save string
         m_sErr = szErr;
@@ -302,8 +310,10 @@ BOOL CSqExe::Execute( LPCTSTR pFunction )
         TCHAR szErr[ CWF_STRSIZE ] = _T( "" );
 
         // Format
+#if !defined( __GNUC__ )
         _sntprintf( szErr, sizeof( szErr ), "%s(%lu)\r\n   %s", e.sSource.c_str(), e.uLine, e.sDesc.c_str() );
         szErr[ sizeof( szErr ) - 1 ] = 0;
+#endif
 
         // Save string
         m_sErr = szErr;
@@ -349,8 +359,10 @@ BOOL CSqExe::Execute( SquirrelObject &soFunction )
         TCHAR szErr[ CWF_STRSIZE ] = _T( "" );
 
         // Format
+#if !defined( __GNUC__ )
         _sntprintf( szErr, sizeof( szErr ), "%s(%lu)\r\n   %s", e.sSource.c_str(), e.uLine, e.sDesc.c_str() );
         szErr[ sizeof( szErr ) - 1 ] = 0;
+#endif
 
         // Save string
         m_sErr = szErr;

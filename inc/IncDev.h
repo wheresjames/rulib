@@ -58,7 +58,7 @@ public:
 	}
 
 	int operator += ( int s )
-	{	while ( s-- ) ++(*this); }
+	{	while ( s-- ) ++(*this); return s; }
 
 	operator T() { return m_num; }
 

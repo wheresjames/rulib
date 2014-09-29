@@ -46,10 +46,10 @@ public:
 
 	/// Default Constructor
 	CDdeSz( DWORD dwInst, LPCTSTR pStr )
-	{	m_dwInst = NULL; m_hSz = NULL; CreateSz( dwInst, pStr ); }
+	{	m_dwInst = 0; m_hSz = 0; CreateSz( dwInst, pStr ); }
 
 	/// Constructor
-	CDdeSz(){ m_dwInst = NULL; m_hSz = NULL; }
+	CDdeSz(){ m_dwInst = 0; m_hSz = 0; }
 
 	/// Destructor
 	virtual ~CDdeSz(){ FreeSz(); }
@@ -69,7 +69,7 @@ public:
 	BOOL CreateSz( DWORD dwInst, LPCTSTR pStr )
 	{	FreeSz(); m_dwInst = dwInst;
 		m_hSz = DdeCreateStringHandle( dwInst, pStr, CP_WINANSI );
-		if ( m_hSz == NULL ) { m_dwInst = NULL; return FALSE; }
+		if ( m_hSz == 0 ) { m_dwInst = 0; return FALSE; }
 		return TRUE;
 	}
 
@@ -78,9 +78,9 @@ public:
 	//==============================================================
 	/// Frees the previously allocated DDE string
 	void FreeSz()
-	{	if ( m_dwInst != NULL && m_hSz != NULL )
+	{	if ( m_dwInst != 0 && m_hSz != 0 )
 			DdeFreeStringHandle( m_dwInst, m_hSz );
-		m_dwInst = NULL; m_hSz = NULL;
+		m_dwInst = 0; m_hSz = 0;
 	}
 
 	//==============================================================

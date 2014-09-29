@@ -1116,7 +1116,7 @@ public:
 	BOOL Get( LPCTSTR pKey, LPCTSTR pName, CRKey *pRk )
 	{	CRKey *prk = GetKey( pKey );
 		if ( prk == NULL ) return FALSE;
-		return ( prk->Get( pName, pRk ) != NULL );
+		return ( prk->Get( pName, pRk ) != 0 );
 	}
 
     std::string sGet( const SQCHAR *pKey, const SQCHAR *pName )
@@ -1146,7 +1146,7 @@ public:
 	BOOL Set( LPCTSTR pKey, LPCTSTR pName, CRKey *pRk )
 	{	CRKey *prk = GetKey( pKey );
 		if ( prk == NULL ) return FALSE;
-		return ( prk->Set( pName, pRk ) != NULL );
+		return prk->Set( pName, pRk );
 	}
 	
 	//==============================================================

@@ -206,7 +206,7 @@ public:
 	
 		\see 
 	*/
-	BOOL _cdecl Msg( const GUID *pNode, const GUID *pClass, DWORD dwFunction = 0, CReg *pParams = NULL, DWORD dwBuffers = 0, ... )
+	BOOL Msg( const GUID *pNode, const GUID *pClass, DWORD dwFunction = 0, CReg *pParams = NULL, DWORD dwBuffers = 0, ... )
 	{	return vMsg( pNode, pClass, dwFunction, pParams, dwBuffers, ( (LPVOID*)&dwBuffers ) + 1 ); }
 
 	//==============================================================

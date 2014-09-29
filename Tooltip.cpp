@@ -121,7 +121,7 @@ BOOL CTooltip::Add(UINT uId, LPCTSTR pText, DWORD dwFlags)
     ti.hwnd = m_hParent;
     ti.lpszText = (char*)pText;
 	ti.uFlags |= TTF_IDISHWND;
-	ti.uId = (UINT)GetDlgItem( m_hParent, uId );
+	ti.uId = RUPTR2DW(GetDlgItem( m_hParent, uId ));
     
 	// Add tooltip
     BOOL ret = (BOOL)SendMessage( m_hWnd, TTM_ADDTOOL, 0, (LPARAM)&ti );	
@@ -143,7 +143,7 @@ BOOL CTooltip::TrackActivate(UINT uId, BOOL bActivate)
 	ZeroMemory( &ti, sizeof( ti ) );
     ti.cbSize = sizeof( ti );
     ti.hwnd = m_hParent;
-	ti.uId = (UINT)GetDlgItem( m_hParent, uId );
+	ti.uId = RUPTR2DW(GetDlgItem( m_hParent, uId ));
     
 	// Add tooltip
     BOOL ret = (BOOL)SendMessage( m_hWnd, TTM_TRACKACTIVATE, bActivate, (LPARAM)&ti );	
@@ -191,7 +191,7 @@ BOOL CTooltip::UpdateText(UINT uId, LPCTSTR pText)
 	ZeroMemory( &ti, sizeof( ti ) );
     ti.cbSize = sizeof( ti );
     ti.hwnd = m_hParent;
-	ti.uId = (UINT)GetDlgItem( m_hParent, uId );
+	ti.uId = RUPTR2DW(GetDlgItem( m_hParent, uId ));
 	ti.hinst = GetModuleHandle( NULL );
 	ti.lpszText = (char*)pText;
     

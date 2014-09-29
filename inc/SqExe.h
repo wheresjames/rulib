@@ -210,9 +210,10 @@ public:
                 TCHAR szErr[ CWF_STRSIZE ] = _T( "" );
 
                 // Format
+#if defined( OEX_MSC )
                 _sntprintf( szErr, sizeof( szErr ), "%s(%lu)\r\n   %s", e.sSource.c_str(), e.uLine, e.sDesc.c_str() );
                 szErr[ sizeof( szErr ) - 1 ] = 0;
-
+#endif
                 // Save string
                 m_sErr = szErr;
                 
@@ -262,8 +263,10 @@ public:
                 TCHAR szErr[ CWF_STRSIZE ] = _T( "" );
 
                 // Format
+#if defined( OEX_MSC )
                 _sntprintf( szErr, sizeof( szErr ), "%s(%lu)\r\n   %s", e.sSource.c_str(), e.uLine, e.sDesc.c_str() );
                 szErr[ sizeof( szErr ) - 1 ] = 0;
+#endif
 
                 // Save string
                 m_sErr = szErr;
@@ -314,8 +317,10 @@ public:
                 TCHAR szErr[ CWF_STRSIZE ] = _T( "" );
 
                 // Format
+#if defined( OEX_MSC )
                 _sntprintf( szErr, sizeof( szErr ), "%s(%lu)\r\n   %s", e.sSource.c_str(), e.uLine, e.sDesc.c_str() );
                 szErr[ sizeof( szErr ) - 1 ] = 0;
+#endif
 
                 // Save string
                 m_sErr = szErr;
@@ -366,9 +371,11 @@ public:
                 TCHAR szErr[ CWF_STRSIZE ] = _T( "" );
 
                 // Format
+#if defined( OEX_MSC )
                 _sntprintf( szErr, sizeof( szErr ), "%s(%lu)\r\n   %s", e.sSource.c_str(), e.uLine, e.sDesc.c_str() );
                 szErr[ sizeof( szErr ) - 1 ] = 0;
-
+#endif
+				
                 // Save string
                 m_sErr = szErr;
                 
@@ -418,8 +425,10 @@ public:
                 TCHAR szErr[ CWF_STRSIZE ] = _T( "" );
 
                 // Format
+#if defined( OEX_MSC )
                 _sntprintf( szErr, sizeof( szErr ), "%s(%lu)\r\n   %s", e.sSource.c_str(), e.uLine, e.sDesc.c_str() );
                 szErr[ sizeof( szErr ) - 1 ] = 0;
+#endif
 
                 // Save string
                 m_sErr = szErr;
@@ -470,8 +479,10 @@ public:
                 TCHAR szErr[ CWF_STRSIZE ] = _T( "" );
 
                 // Format
+#if defined( OEX_MSC )
                 _sntprintf( szErr, sizeof( szErr ), "%s(%lu)\r\n   %s", e.sSource.c_str(), e.uLine, e.sDesc.c_str() );
                 szErr[ sizeof( szErr ) - 1 ] = 0;
+#endif
 
                 // Save string
                 m_sErr = szErr;
@@ -522,8 +533,10 @@ public:
                 TCHAR szErr[ CWF_STRSIZE ] = _T( "" );
 
                 // Format
+#if defined( OEX_MSC )
                 _sntprintf( szErr, sizeof( szErr ), "%s(%lu)\r\n   %s", e.sSource.c_str(), e.uLine, e.sDesc.c_str() );
                 szErr[ sizeof( szErr ) - 1 ] = 0;
+#endif
 
                 // Save string
                 m_sErr = szErr;
@@ -550,13 +563,13 @@ public:
     static void SqPrint( HSQUIRRELVM v, const SQChar* s, ... );
 
     /// Intercepts errors
-    static SQInteger CSqExe::SqErrorHandler( HSQUIRRELVM v );
+    static SQInteger SqErrorHandler( HSQUIRRELVM v );
 
     /// Handles a script compiler error
-    static void CSqExe::SqCompilerErrorHandler( HSQUIRRELVM v, const SQChar *sErr, const SQChar *sSource, SQInteger line, SQInteger column );
+    static void SqCompilerErrorHandler( HSQUIRRELVM v, const SQChar *sErr, const SQChar *sSource, SQInteger line, SQInteger column );
 
     /// Auxiliary error handler
-    static SQInteger CSqExe::SqAuxErrorHandler( HSQUIRRELVM v );
+    static SQInteger SqAuxErrorHandler( HSQUIRRELVM v );
 
     /// Executes the specified buffer
     BOOL Run( LPCTSTR pScript );

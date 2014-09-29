@@ -379,7 +379,7 @@ public:
 	
 		\see 
 	*/
-	void* CLList::Put(LPVOID dw)
+	void* Put(LPVOID dw)
 	{	return New( NULL, dw ); }
 
 	//==============================================================
@@ -394,7 +394,7 @@ public:
 	
 		\see 
 	*/
-	void* CLList::Put(LPVOID pVal, DWORD size)
+	void* Put(LPVOID pVal, DWORD size)
 	{	return New( NULL, NULL, pVal, size ); }
 
 	//==============================================================
@@ -408,7 +408,7 @@ public:
 	
 		\see 
 	*/
-	void* CLList::Put(LPCTSTR pStr)
+	void* Put(LPCTSTR pStr)
 	{	return Put( (void*)pStr, (DWORD)strlen( pStr ) ); }
 
 	//==============================================================

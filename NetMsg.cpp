@@ -67,6 +67,7 @@ BOOL CNetMsg::VerifyPacket()
 
 BOOL CNetMsg::ReadPacket( LPVOID pBuf, DWORD dwSize )
 {_STT();
+
 	// Process packets
 	if ( CDataPacket::ReadPacket( pBuf, dwSize ) ) do
 	{

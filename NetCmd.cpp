@@ -39,7 +39,16 @@ CNetCmd::~CNetCmd()
 
 }
 
-BOOL CNetCmd::vMsg( const GUID *pNode, const GUID *pClass, DWORD dwFunction, CReg *pParams, DWORD dwBuffers, LPVOID *pArgs )
+BOOL CNetCmd::Msg( const GUID *pNode, const GUID *pClass, DWORD dwFunction, CReg *pParams, DWORD dwBuffers, ... )
+{_STT();
+	ruVaList ap; ruVaStart( ap, dwBuffers );
+	BOOL ret = vMsg( pNode, pClass, dwFunction, pParams, dwBuffers, ap ); 
+	ruVaEnd( ap );
+	return ret;
+}
+
+
+BOOL CNetCmd::vMsg( const GUID *pNode, const GUID *pClass, DWORD dwFunction, CReg *pParams, DWORD dwBuffers, ruVaList pArgs )
 {_STT();
 	// Verify we have authority to send this message
 	if ( !OnTxAuthenticate( pNode, pClass, dwFunction ) )
@@ -66,20 +75,20 @@ BOOL CNetCmd::vMsg( const GUID *pNode, const GUID *pClass, DWORD dwFunction, CRe
 						params.GetBufferSize();
 
 	DWORD i;
-	LPVOID *ptrExtra = pArgs;
+	ruVaList pTmp = pArgs;
 	for ( i = 0; i < dwBuffers; i++ )
 	{	RULIB_TRY 
-		{	DWORD	dwType = *(LPDWORD)( ptrExtra );
-			LPBYTE	pPtr = *(LPBYTE*)( ptrExtra + 1 );
-			DWORD 	dwSize = *(LPDWORD)( ptrExtra + 2 );
+		{	
+			long	dwType = ruVaArg( pTmp, long );
+			char*	pPtr = ruVaArg( pTmp, char* );
+			long 	dwSize = ruVaArg( pTmp, long );
 			dwBlocks++;
 
 			// Zero means NULL terminated
 			if ( dwSize == 0 && pPtr != NULL ) dwSize = strlen( (LPCTSTR)pPtr );
 
 			dwTotalSize += dwSize;
-
-			ptrExtra += 3;
+			
 		} // end try
 		RULIB_CATCH_ALL { return FALSE; }
 	} // end for
@@ -112,12 +121,13 @@ BOOL CNetCmd::vMsg( const GUID *pNode, const GUID *pClass, DWORD dwFunction, CRe
 		pNc->Tx()->AddPacketData( NETMSGDT_PARAMS, params.GetBuffer(), params.GetBufferSize() );
 
 	// Add the data to the packet
-	ptrExtra = pArgs;
+	pTmp = pArgs;
 	for ( i = 0; i < dwBuffers; i++ )
 	{	RULIB_TRY 
-		{	DWORD	dwType = *(LPDWORD)( ptrExtra );
-			LPBYTE	pPtr = *(LPBYTE*)( ptrExtra + 1 );
-			DWORD 	dwSize = *(LPDWORD)( ptrExtra + 2 );
+		{
+			long	dwType = ruVaArg( pTmp, long );
+			char*	pPtr = ruVaArg( pTmp, char* );
+			long 	dwSize = ruVaArg( pTmp, long );
 
 			// Zero means NULL terminated
 			if ( dwSize == 0 && pPtr != NULL ) dwSize = strlen( (LPCTSTR)pPtr );
@@ -125,7 +135,6 @@ BOOL CNetCmd::vMsg( const GUID *pNode, const GUID *pClass, DWORD dwFunction, CRe
 			// Add packet data block
 			pNc->Tx()->AddPacketData( dwType, pPtr, dwSize );
 
-			ptrExtra += 3;
 		} // end try
 		RULIB_CATCH_ALL { return FALSE; }
 	} // end for

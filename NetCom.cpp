@@ -58,6 +58,7 @@ CNetCom::~CNetCom()
 
 long CNetCom::NetMsg( LPVOID pData, WPARAM wParam, LPARAM lParam )
 {_STT();
+
 	// Get a pointer to the class
 	CNetCom *pNc = (CNetCom*)pData;
 	if ( pNc == NULL ) return FALSE;
@@ -68,6 +69,7 @@ long CNetCom::NetMsg( LPVOID pData, WPARAM wParam, LPARAM lParam )
 
 long CNetCom::OnNetMsg(WPARAM wParam, LPARAM lParam)
 {_STT();
+
 	// Is it a message from the receiver?
 	if ( wParam == CNetMsg::eRx && lParam == (LPARAM)m_prx ) 
 		return OnRx();
@@ -81,6 +83,7 @@ long CNetCom::OnNetMsg(WPARAM wParam, LPARAM lParam)
 
 BOOL CNetCom::OnRx()
 {_STT();
+
 	// Read dst
 	if ( !m_prx->ReadPacketData( 0, NETMSGDT_DSTADDRESS, &m_conn.addrNext, sizeof( m_conn.addrNext ) ) )
 		return FALSE;

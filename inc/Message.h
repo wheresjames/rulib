@@ -61,10 +61,10 @@ class CMessage
 public:
 
 	/// Default constructor
-	CMessage() { ClearMessageTarget(); ClearCallbackFunction(); }
+	CMessage();
 
 	/// Destructor
-	virtual ~CMessage() {};
+	virtual ~CMessage();
 
 //--------------------------------------------------------------------
 // For Message Handeling
@@ -85,11 +85,7 @@ public:
 	
 		\see 
 	*/
-	void SetMessageTarget( HWND hWnd, UINT uWMMessageID ) 
-	{	
-		m_hWnd = hWnd; 
-		m_uWMMessageID = uWMMessageID; 
-	}
+	void SetMessageTarget( HWND hWnd, UINT uWMMessageID );
 
 	//==============================================================
 	// GetWMMessageHWND()
@@ -128,12 +124,7 @@ public:
 	
 		\see 
 	*/
-	BOOL SendWMMessage(WPARAM wParam, LPARAM lParam)
-	{
-		if ( !IsMessageTarget() ) return FALSE;
-		::SendMessage( m_hWnd, m_uWMMessageID, wParam, lParam );
-		return TRUE;
-	}
+	BOOL SendWMMessage(WPARAM wParam, LPARAM lParam);
 
 	//==============================================================
 	// PostWMMessage()
@@ -147,12 +138,7 @@ public:
 	
 		\see 
 	*/
-	BOOL PostWMMessage(WPARAM wParam, LPARAM lParam)
-	{
-		if (!IsMessageTarget()) return FALSE;
-		::PostMessage( m_hWnd, m_uWMMessageID, wParam, lParam );
-		return TRUE;
-	}
+	BOOL PostWMMessage(WPARAM wParam, LPARAM lParam);
 
 private:
 
@@ -179,13 +165,7 @@ public:
 	
 		\see 
 	*/
-	virtual BOOL SetCallbackFunction( CMESSAGE_CALLBACK_FUNCTION pFunction, LPVOID pData = NULL ) 
-	{
-		if ( pFunction == NULL ) return FALSE;
-		m_pCallbackFunction = pFunction;
-		m_pData = pData;
-		return TRUE; 
-	}
+	virtual BOOL SetCallbackFunction( CMESSAGE_CALLBACK_FUNCTION pFunction, LPVOID pData );
 
 	//==============================================================
 	// IsCallbackFunction()
@@ -217,11 +197,7 @@ public:
 	
 		\see 
 	*/
-	BOOL DoCallback( WPARAM wParam, LPARAM lParam )
-	{
-		if ( !IsCallbackFunction() ) return FALSE;
-		return ( GetCallbackFunction() )( m_pData, wParam, lParam ); 
-	}
+	BOOL DoCallback( WPARAM wParam, LPARAM lParam );
 
 private:
 
@@ -248,13 +224,7 @@ public:
 		\see 
 	*/
 	BOOL MSendMessage(	WPARAM wParam, LPARAM lParam,
-						BOOL bFunction = TRUE, BOOL bWMessage = TRUE )
-	{
-		BOOL	bRet = FALSE;
-		if ( bFunction ) bRet |= DoCallback( wParam, lParam );
-		if ( IsMessageTarget() ) bRet |= SendWMMessage( wParam, lParam );
-		return bRet;
-	}
+						BOOL bFunction = TRUE, BOOL bWMessage = TRUE );
 
 	//==============================================================
 	// MPostMessage()
@@ -271,13 +241,8 @@ public:
 		\see 
 	*/
 	BOOL MPostMessage(	WPARAM wParam, LPARAM lParam,
-						BOOL bFunction = TRUE, BOOL bWMessage = TRUE )
-	{
-		BOOL	bRet = FALSE;
-		if ( bFunction ) bRet |= DoCallback( wParam, lParam );
-		if ( IsMessageTarget() ) bRet |= PostWMMessage( wParam, lParam );
-		return bRet;
-	}
+						BOOL bFunction = TRUE, BOOL bWMessage = TRUE );
+						
 };
 
 #endif // !defined(AFX_MESSAGE_H__90009DC9_A2DD_11D1_A427_00104B2C9CFA__INCLUDED_)

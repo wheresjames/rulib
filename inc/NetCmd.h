@@ -182,7 +182,7 @@ public:
 	
 		\see 
 	*/
-	BOOL vMsg( const GUID *pNode, const GUID *pClass, DWORD dwFunction = 0, CReg *pParams = NULL, DWORD dwBuffers = 0, LPVOID *pArgs = NULL );
+	BOOL vMsg( const GUID *pNode, const GUID *pClass, DWORD dwFunction = 0, CReg *pParams = NULL, DWORD dwBuffers = 0, ruVaList pArgs = 0 );
 
 	//==============================================================
 	// Msg()
@@ -206,8 +206,7 @@ public:
 	
 		\see 
 	*/
-	BOOL Msg( const GUID *pNode, const GUID *pClass, DWORD dwFunction = 0, CReg *pParams = NULL, DWORD dwBuffers = 0, ... )
-	{	return vMsg( pNode, pClass, dwFunction, pParams, dwBuffers, ( (LPVOID*)&dwBuffers ) + 1 ); }
+	BOOL Msg( const GUID *pNode, const GUID *pClass, DWORD dwFunction = 0, CReg *pParams = NULL, DWORD dwBuffers = 0, ... );
 
 	//==============================================================
 	// OnRxAuthenticate()

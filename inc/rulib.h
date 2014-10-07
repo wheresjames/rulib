@@ -241,6 +241,21 @@
 
 //#endif
 
+#define RUDBGSTR( s ) printf( "%s(%lu):%s(): %s\n", __FILE__, (long unsigned int)__LINE__, __FUNCTION__, s ), fflush( stdout );
+#define RUDBGLONG( s ) printf( "%s(%lu):%s(): %s = %lu\n", __FILE__, (long unsigned int)__LINE__, __FUNCTION__, #s, (long unsigned int)s ), fflush( stdout );
+
+#if defined( __GNUC__ )
+#	define ruVaList			        __builtin_va_list
+#	define ruVaStart		        __builtin_va_start
+#	define ruVaEnd			        __builtin_va_end
+#	define ruVaArg			        __builtin_va_arg
+#else
+#	define ruVaList				    void**
+#	define ruVaStart( v, p )	    ( v = ( ( (void**)&p ) + 1 ) )
+#	define ruVaEnd( v )
+#	define ruVaArg( v, t )		    ( *(t*)( v++ ) )
+#endif
+
 // This only works if your paths match the above mentioned structure
 #ifdef RULIB_LIBS
 

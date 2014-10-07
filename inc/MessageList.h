@@ -108,10 +108,10 @@ private:
 public:
 
 	/// Default constructor
-	CMessageList() { m_bClose = FALSE; }
+	CMessageList();
 
 	/// Destructor
-	virtual ~CMessageList() { m_bClose = TRUE; ClearAllMessageTargets(); };
+	virtual ~CMessageList();
 
 	//==============================================================
 	// CreateKey()
@@ -127,16 +127,7 @@ public:
 	
 		\see 
 	*/
-	GUID* CreateKey( GUID* pKey, void* dwUser1, void* dwUser2, const GUID *pguid )
-	{	MD5_CTX ctx;
-		CMd5Rsa::MD5Init( &ctx );
-		CMd5Rsa::MD5Update( &ctx, (LPBYTE)&dwUser1, sizeof( dwUser1 ) );
-		CMd5Rsa::MD5Update( &ctx, (LPBYTE)&dwUser2, sizeof( dwUser2 ) );
-		if ( pguid && !IsEqualGUID( *pguid, CLSID_ZERO ) ) 
-            CMd5Rsa::MD5Update( &ctx, (LPBYTE)pguid, sizeof( GUID ) );
-		CMd5Rsa::MD5Final( (LPBYTE)pKey, &ctx );
-		return pKey;
-	}
+	GUID* CreateKey( GUID* pKey, void* dwUser1, void* dwUser2, const GUID *pguid );
 
 //--------------------------------------------------------------------
 // For Message Handeling
@@ -155,19 +146,7 @@ public:
 										to send message.
 		\param [in] pguid			-	Pointer to a filter GUID
 	*/
-	void SetMessageTarget( HWND hWnd, UINT uWMMessageID, BOOL bPost, const GUID *pguid = NULL )
-	{
-		if ( m_bClose ) return;
-		CTlLocalLock ll( m_vMsgTargetQueue );
-		if ( !ll.IsLocked() ) return;
-		
-		if ( hWnd != NULL && uWMMessageID && ::IsWindow( hWnd ) )			
-		{	GUID guid; CreateKey( &guid, hWnd, (void*)uWMMessageID, pguid );
-			m_vMsgTargetQueue.erase( guid );
-			m_vMsgTargetQueue.push_back( guid, _PTR_NEW CMsgTarget( hWnd, uWMMessageID, bPost, 1, pguid ) );
-		} // end if
-
-	}
+	void SetMessageTarget( HWND hWnd, UINT uWMMessageID, BOOL bPost, const GUID *pguid = NULL );
 
 	//==============================================================
 	// RemoveMessageTarget()
@@ -178,82 +157,27 @@ public:
 		\param [in] uWMMessageID	-	Message ID
 		\param [in] pguid			-	Pointer to a filter GUID
 	*/
-	void RemoveMessageTarget( HWND hWnd, UINT uWMMessageID, const GUID *pguid = NULL )
-	{	
-		if ( m_bClose ) return;
-		CTlLocalLock ll( m_vMsgTargetQueue );
-		if ( !ll.IsLocked() ) return;
-
-        if ( hWnd != NULL && uWMMessageID && ::IsWindow( hWnd ) )			
-		{	GUID guid; CreateKey( &guid, hWnd, (void*)uWMMessageID, pguid );
-			m_vMsgTargetQueue.erase( guid );
-			m_vMsgTargetQueue.push_back( guid, _PTR_NEW CMsgTarget( hWnd, uWMMessageID, 0, 2, pguid ) );
-		} // end if
-
-//        GUID guid; m_vMsgTargetQueue.erase( *CreateKey( &guid, (DWORD)hWnd, (DWORD)uWMMessageID, pguid ) );
-	}
+	void RemoveMessageTarget( HWND hWnd, UINT uWMMessageID, const GUID *pguid = NULL );
 
 	//==============================================================
 	// MessageTargets()
 	//==============================================================
 	/// Returns the number of registered Windows message targets
-	DWORD MessageTargets()
-	{	
-		if ( m_bClose ) return 0;
-		return ( m_vMsgTarget.Size() + m_vMsgTargetQueue.Size() ); 
-	}
-
+	DWORD MessageTargets();
+	
 	//==============================================================
 	// CallbackFunctions()
 	//==============================================================
 	/// Returns the number of registered callback functions
-	DWORD CallbackFunctions()
-	{	
-		if ( m_bClose ) return 0;
-		return ( m_vCallbackTarget.Size() + m_vCallbackTargetQueue.Size() ); 
-	}
+	DWORD CallbackFunctions();
 
 	//==============================================================
 	// ClearAllMessageTargets()
 	//==============================================================
 	/// Clears all the message targets
-	void ClearAllMessageTargets() 
-	{
-		{	CTlLocalLock ll( m_vMsgTargetQueue );
-			if ( ll.IsLocked() ) m_vMsgTargetQueue.clear(); 
-		}
-		{	CTlLocalLock ll( m_vMsgTarget );
-			if ( ll.IsLocked() ) m_vMsgTarget.clear(); 
-		}
+	void ClearAllMessageTargets();
 
-		{	CTlLocalLock ll( m_vCallbackTargetQueue );
-			if ( ll.IsLocked() ) m_vCallbackTargetQueue.clear(); 
-		}
-		{	CTlLocalLock ll( m_vCallbackTarget );
-			if ( ll.IsLocked() ) m_vCallbackTarget.clear(); 
-		}
-	}
-
-	void UpdateMessageQueue()
-	{
-		if ( m_bClose ) return;
-		CTlLocalLock ll( m_vMsgTargetQueue );
-		if ( !ll.IsLocked() ) return;
-
-        THList< GUID, CMsgTarget >::iterator it = NULL;
-		while ( ( it = m_vMsgTargetQueue.next( it ) ) != m_vMsgTargetQueue.end() )
-        {
-            // Remove any existing
-            m_vMsgTarget.erase( *it->key() );
-
-            // Add
-            if ( 1 == (*it)->uAction )
-                m_vMsgTarget.push_back( *it->key(), _PTR_NEW CMsgTarget( (*it)->hWnd, (*it)->uMsg, (*it)->bPost, 0, &(*it)->guid ) );
-
-            it = m_vMsgTargetQueue.erase( it );
-
-        } // end while
-    }
+	void UpdateMessageQueue();
 
 	//==============================================================
 	// SendWMMessage()
@@ -271,24 +195,7 @@ public:
 	
 		\see 
 	*/
-	BOOL SendWMMessage(WPARAM wParam, LPARAM lParam, const GUID *pguid = NULL)
-	{
-		if ( m_bClose ) return FALSE;
-		CTlLocalLock ll( m_vMsgTarget );
-		if ( !ll.IsLocked() ) return FALSE;
-
-        UpdateMessageQueue();
-
-		THList< GUID, CMsgTarget >::iterator it = NULL;
-		while ( ( it = m_vMsgTarget.next( it ) ) != m_vMsgTarget.end() )
-		{	if ( ::IsWindow( (*it)->hWnd ) ) 
-			{	if ( pguid == NULL || IsEqualGUID( (*it)->guid, CLSID_ZERO ) || IsEqualGUID( (*it)->guid, *pguid ) )
-					::SendMessage( (*it)->hWnd, (*it)->uMsg, wParam, lParam );
-			} // end if
-			else it = m_vMsgTarget.erase( it );
-		} // end while
-		return TRUE;
-	}
+	BOOL SendWMMessage(WPARAM wParam, LPARAM lParam, const GUID *pguid = NULL);
 
 	//==============================================================
 	// PostWMMessage()
@@ -306,24 +213,7 @@ public:
 	
 		\see 
 	*/
-	BOOL PostWMMessage(WPARAM wParam, LPARAM lParam, const GUID *pguid = NULL)
-	{
-		if ( m_bClose ) return FALSE;
-		CTlLocalLock ll( m_vMsgTarget );
-		if ( !ll.IsLocked() ) return FALSE;
-
-        UpdateMessageQueue();
-
-		THList< GUID, CMsgTarget >::iterator it = NULL;
-		while ( ( it = m_vMsgTarget.next( it ) ) != m_vMsgTarget.end() )
-		{	if ( ::IsWindow( (*it)->hWnd ) ) 
-			{	if ( pguid == NULL || IsEqualGUID( (*it)->guid, CLSID_ZERO ) || IsEqualGUID( (*it)->guid, *pguid ) )
-					::PostMessage( (*it)->hWnd, (*it)->uMsg, wParam, lParam );
-			} // end if
-			else it = m_vMsgTarget.erase( it );
-		} // end while
-		return TRUE;
-	}
+	BOOL PostWMMessage(WPARAM wParam, LPARAM lParam, const GUID *pguid = NULL);
 
 	//==============================================================
 	// PostWMMessage()
@@ -341,26 +231,7 @@ public:
 	
 		\see 
 	*/
-	BOOL MWMMessage(WPARAM wParam, LPARAM lParam, const GUID *pguid = NULL)
-	{
-		if ( m_bClose ) return FALSE;
-		CTlLocalLock ll( m_vMsgTarget );
-		if ( !ll.IsLocked() ) return FALSE;
-
-        UpdateMessageQueue();
-
-		THList< GUID, CMsgTarget >::iterator it =NULL;
-		while ( ( it = m_vMsgTarget.next( it ) ) != m_vMsgTarget.end() )
-		{	if ( ::IsWindow( (*it)->hWnd ) ) 
-			{	if ( pguid == NULL || IsEqualGUID( (*it)->guid, CLSID_ZERO ) || IsEqualGUID( (*it)->guid, *pguid ) )
-				{	if ( (*it)->bPost ) ::PostMessage( (*it)->hWnd, (*it)->uMsg, wParam, lParam );
-					else ::SendMessage( (*it)->hWnd, (*it)->uMsg, wParam, lParam );
-				} // end if
-			} // end if
-			else it = m_vMsgTarget.erase( it );
-		} // end while
-		return TRUE;
-	}
+	BOOL MWMMessage(WPARAM wParam, LPARAM lParam, const GUID *pguid = NULL);
 
 private:
 
@@ -375,26 +246,7 @@ private:
 ///////////////////////////////////////////////
 public:
 
-	void UpdateCallbackQueue()
-	{
-		if ( m_bClose ) return;
-		CTlLocalLock ll( m_vCallbackTargetQueue );
-		if ( !ll.IsLocked() ) return;
-
-		THList< GUID, CCallbackTarget >::iterator it = NULL;
-		while ( ( it = m_vCallbackTargetQueue.next( it ) ) != m_vCallbackTargetQueue.end() )
-        {
-            // Remove any existing
-            m_vCallbackTarget.erase( *it->key() );
-
-            // Add
-            if ( 1 == (*it)->uAction )
-			    m_vCallbackTarget.push_back( *it->key(), _PTR_NEW CCallbackTarget( (*it)->pCallbackFunction, (*it)->pCallbackFunction2, (*it)->pData, 1, &(*it)->guid ) );
-
-            it = m_vCallbackTargetQueue.erase( it );
-
-        } // end while
-    }
+	void UpdateCallbackQueue();
 
 	//==============================================================
 	// SetCallbackFunction()
@@ -409,19 +261,7 @@ public:
 	
 		\see 
 	*/
-	virtual BOOL SetCallbackFunction( CMESSAGE_CALLBACK_FUNCTION pFunction, LPVOID pData = NULL, const GUID *pguid = NULL )
-	{
-		if ( m_bClose ) return FALSE;
-		CTlLocalLock ll( m_vCallbackTargetQueue );
-		if ( !ll.IsLocked() ) return FALSE;
-		
-		if ( pFunction != NULL )			
-		{	GUID guid; CreateKey( &guid, (void*)pFunction, pData, pguid );
-			m_vCallbackTargetQueue.erase( guid );
-			m_vCallbackTargetQueue.push_back( guid, _PTR_NEW CCallbackTarget( pFunction, NULL, pData, 1, pguid ) ); 
-		} // end if
-		return TRUE; 	
-	}
+	virtual BOOL SetCallbackFunction( CMESSAGE_CALLBACK_FUNCTION pFunction, LPVOID pData = NULL, const GUID *pguid = NULL );
 
 	//==============================================================
 	// SetCallbackFunction()
@@ -436,20 +276,7 @@ public:
 	
 		\see 
 	*/
-	virtual BOOL SetCallbackFunction( CMESSAGELIST_CALLBACK_FUNCTION pFunction, LPVOID pData = NULL, const GUID *pguid = NULL )
-	{
-		if ( m_bClose ) return FALSE;
-		CTlLocalLock ll( m_vCallbackTargetQueue );
-		if ( !ll.IsLocked() ) return FALSE;
-		
-		if ( pFunction != NULL )			
-		{	GUID guid; CreateKey( &guid, (void*)pFunction, pData, pguid );
-			m_vCallbackTargetQueue.erase( guid );
-			m_vCallbackTargetQueue.push_back( guid, _PTR_NEW CCallbackTarget( NULL, pFunction, pData, 1, pguid ) ); 
-		} // end if
-		return TRUE; 	
-
-	}
+	virtual BOOL SetCallbackFunction( CMESSAGELIST_CALLBACK_FUNCTION pFunction, LPVOID pData = NULL, const GUID *pguid = NULL );
 
 	//==============================================================
 	// DoCallback()
@@ -466,31 +293,7 @@ public:
 	
 		\see 
 	*/
-	BOOL DoCallback( WPARAM wParam, LPARAM lParam, const GUID *pguid = NULL )
-	{
-		if ( m_bClose ) return FALSE;
-		CTlLocalLock ll( m_vCallbackTarget );
-		if ( !ll.IsLocked() ) return FALSE;
-
-        UpdateCallbackQueue();
-
-		THList< GUID, CCallbackTarget >::iterator it = NULL;
-		while ( ( it = m_vCallbackTarget.next( it ) ) != m_vCallbackTarget.end() )
-		{	RULIB_TRY
-			{	if ( (*it)->pCallbackFunction != NULL || (*it)->pCallbackFunction2 != NULL ) 
-				{	if ( pguid == NULL || IsEqualGUID( (*it)->guid, CLSID_ZERO ) || IsEqualGUID( (*it)->guid, *pguid ) )
-					{	if ( (*it)->pCallbackFunction != NULL )
-							(*it)->pCallbackFunction( (*it)->pData, wParam, lParam );
-						else if ( (*it)->pCallbackFunction2 != NULL )
-							(*it)->pCallbackFunction2( (*it)->pData, wParam, lParam, pguid );
-					} // end if
-				} // end if
-				else it = m_vCallbackTarget.erase( it );
-			} RULIB_CATCH_ALL 
-			{ RULIB_TRY { it = m_vCallbackTarget.erase( it ); } RULIB_CATCH_ALL { return TRUE; } }
-		} // end while
-		return TRUE;
-	}
+	BOOL DoCallback( WPARAM wParam, LPARAM lParam, const GUID *pguid = NULL );
 
 	//==============================================================
 	// RemoveCallbackFunction()
@@ -505,21 +308,7 @@ public:
 	
 		\see 
 	*/
-	void RemoveCallbackFunction( CMESSAGE_CALLBACK_FUNCTION pFunction, LPVOID pData, const GUID *pguid = NULL )
-	{
-		if ( m_bClose ) return;
-		CTlLocalLock ll( m_vCallbackTargetQueue );
-		if ( !ll.IsLocked() ) return;
-		
-		if ( pFunction != NULL )			
-		{	GUID guid; CreateKey( &guid, (void*)pFunction, pData, pguid );
-			m_vCallbackTargetQueue.erase( guid );
-			m_vCallbackTargetQueue.push_back( guid, _PTR_NEW CCallbackTarget( pFunction, NULL, pData, 2, pguid ) ); 
-		} // end if
-        
-//      GUID guid; CreateKey( &guid, (DWORD)pFunction, (DWORD)pData, pguid );
-//		m_vCallbackTarget.erase( guid ); 
-    }
+	void RemoveCallbackFunction( CMESSAGE_CALLBACK_FUNCTION pFunction, LPVOID pData, const GUID *pguid = NULL );
 
 	//==============================================================
 	// RemoveCallbackFunction()
@@ -534,21 +323,7 @@ public:
 	
 		\see 
 	*/
-	void RemoveCallbackFunction( CMESSAGELIST_CALLBACK_FUNCTION pFunction, LPVOID pData, const GUID *pguid = NULL )
-	{
-		if ( m_bClose ) return;
-		CTlLocalLock ll( m_vCallbackTargetQueue );
-		if ( !ll.IsLocked() ) return;
-		
-		if ( pFunction != NULL )			
-		{	GUID guid; CreateKey( &guid, (void*)pFunction, pData, pguid );
-			m_vCallbackTargetQueue.erase( guid );
-			m_vCallbackTargetQueue.push_back( guid, _PTR_NEW CCallbackTarget( NULL, pFunction, pData, 2, pguid ) ); 
-		} // end if
-
-//        GUID guid; CreateKey( &guid, (DWORD)pFunction, (DWORD)pData, pguid );
-//		m_vCallbackTarget.erase( guid ); 
-    }
+	void RemoveCallbackFunction( CMESSAGELIST_CALLBACK_FUNCTION pFunction, LPVOID pData, const GUID *pguid = NULL );
 
 private:
 
@@ -616,14 +391,7 @@ public:
 		\see 
 	*/
 	BOOL MMessage(	WPARAM wParam, LPARAM lParam, const GUID *pguid = NULL,
-						BOOL bFunction = TRUE, BOOL bWMessage = TRUE )
-	{
-		if ( m_bClose ) return FALSE;
-		BOOL bRet = FALSE;
-		if ( bFunction ) bRet |= DoCallback( wParam, lParam, pguid );
-		if ( MessageTargets() ) bRet |= MWMMessage( wParam, lParam, pguid );
-		return bRet;
-	}
+						BOOL bFunction = TRUE, BOOL bWMessage = TRUE );
 
 	//==============================================================
 	// _MSendMessage()
@@ -641,14 +409,7 @@ public:
 		\see 
 	*/
 	BOOL _MSendMessage(	WPARAM wParam, LPARAM lParam, const GUID *pguid = NULL,
-						BOOL bFunction = TRUE, BOOL bWMessage = TRUE )
-	{
-		if ( m_bClose ) return FALSE;
-		BOOL bRet = FALSE;
-		if ( bFunction ) bRet |= DoCallback( wParam, lParam, pguid );
-		if ( MessageTargets() ) bRet |= SendWMMessage( wParam, lParam, pguid );
-		return bRet;
-	}
+						BOOL bFunction = TRUE, BOOL bWMessage = TRUE );
 
 	//==============================================================
 	// _MPostMessage()
@@ -666,14 +427,8 @@ public:
 		\see 
 	*/
 	BOOL _MPostMessage(	WPARAM wParam, LPARAM lParam, const GUID *pguid = NULL,
-						BOOL bFunction = TRUE, BOOL bWMessage = TRUE )
-	{
-		if ( m_bClose ) return FALSE;
-		BOOL bRet = FALSE;
-		if ( bFunction ) bRet |= DoCallback( wParam, lParam, pguid );
-		if ( MessageTargets() ) bRet |= PostWMMessage( wParam, lParam, pguid );
-		return bRet;
-	}
+						BOOL bFunction = TRUE, BOOL bWMessage = TRUE );
+
 };
 
 class CThreadTimer : public CThread, public CMessageList
@@ -687,30 +442,7 @@ public:
 	~CThreadTimer() {}
 
     /// Thread initialization
-    virtual BOOL DoThread( LPVOID pData )
-	{
-		DWORD dwWait = m_dwDelay;
-		m_dwPos = GetTickCount() + m_dwDelay;
-		
-		while ( 0 != ::WaitForSingleObject( GetStopEvent(), dwWait ) )
-		{
-			// Do the callback
-			DoCallback( (WPARAM)dwWait, (LPARAM)this );
-
-			// Where we want to be
-			m_dwPos += m_dwDelay;
-						
-			// Where we are
-			DWORD dwTick = GetTickCount();
-			if ( dwTick < m_dwPos )
-				dwWait = m_dwPos - dwTick;
-			else
-				dwWait = 0;
-
-		} // end while
-
-		return FALSE;
-	}
+    virtual BOOL DoThread( LPVOID pData );
 
 	/// Start the timer
 	BOOL StartTimer( DWORD dwDelay )

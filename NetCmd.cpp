@@ -50,6 +50,7 @@ BOOL CNetCmd::Msg( const GUID *pNode, const GUID *pClass, DWORD dwFunction, CReg
 
 BOOL CNetCmd::vMsg( const GUID *pNode, const GUID *pClass, DWORD dwFunction, CReg *pParams, DWORD dwBuffers, ruVaList pArgs )
 {_STT();
+
 	// Verify we have authority to send this message
 	if ( !OnTxAuthenticate( pNode, pClass, dwFunction ) )
 		return FALSE;

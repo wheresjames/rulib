@@ -109,19 +109,23 @@ CNetCom* CNetMgr::AddSession( const GUID *guidId, CNetCom* pNc )
 {_STT();
 	if ( pNc == NULL ) return FALSE;
 
-	// Acquire lock
-	CTlLocalLock ll( *this );
-	if ( !ll.IsLocked() ) return NULL;
+	{ // Lock scope
+	
+		// Acquire lock
+		CTlLocalLock ll( *this );
+		if ( !ll.IsLocked() ) return NULL;
 
-	// Set the connection id
-	pNc->Tx()->SetConnectionId( guidId );
+		// Set the connection id
+		pNc->Tx()->SetConnectionId( guidId );
 
-	// Set global description if applicable
-	if ( m_sGlobalDescription.size() )
-		pNc->Tx()->SetConnectionDescription( m_sGlobalDescription );
+		// Set global description if applicable
+		if ( m_sGlobalDescription.size() )
+			pNc->Tx()->SetConnectionDescription( m_sGlobalDescription );
 
-	// Save session pointer into list	
-	m_lstSession.push_back( *( (GUID*)guidId ), pNc );
+		// Save session pointer into list	
+		m_lstSession.push_back( *( (GUID*)guidId ), pNc );
+
+	} // End lock scope
 
 	// Notify of new node
 	MMessage( NetCmd::efNodeAdded, (LPARAM)this, &NetCmd::IID );
@@ -198,17 +202,20 @@ BOOL CNetMgr::Cleanup()
 	return bChanged;
 }
 
-CNetCom* CNetMgr::GetNode( const GUID *pGuid )
+CNetCom* CNetMgr::GetNode( const GUID *pGuid, DWORD dwTo )
 {_STT();
+
 	// Acquire lock
-	CTlLocalLock ll( *this );
-	if ( !ll.IsLocked() ) return NULL;
+	CTlLocalLock ll( *this, dwTo );
+	if ( !ll.IsLocked() )
+		return NULL;
 
 	return FindSession( pGuid );
 }
 
 CNetCom* CNetMgr::CreateNewSession()
 {_STT();
+
 	// Acquire lock
 	CTlLocalLock ll( *this );
 	if ( !ll.IsLocked() ) return NULL;
@@ -228,6 +235,7 @@ CNetCom* CNetMgr::CreateNewSession()
 
 CNetCom* CNetMgr::FindByRxName(LPCTSTR pName)
 {_STT();
+
 	// Acquire lock
 	CTlLocalLock ll( *this );
 	if ( !ll.IsLocked() ) return NULL;
@@ -243,6 +251,7 @@ CNetCom* CNetMgr::FindByRxName(LPCTSTR pName)
 
 CNetCom* CNetMgr::FindByTxName(LPCTSTR pName)
 {_STT();
+
 	// Acquire lock
 	CTlLocalLock ll( *this );
 	if ( !ll.IsLocked() ) return NULL;
@@ -295,19 +304,20 @@ BOOL CNetMgr::NotifyNetwork(const GUID *pguidClass, DWORD dwCmd)
 	if( pguidClass
 		&& IsEqualGUID( *pguidClass, NetCmd::IID )
 		&& NetCmd::efDoCleanup == dwCmd )
-	{
-		Cleanup();
+	{	Cleanup();
 		return TRUE;
 	}
 	//...wjr 9/22/06
 
 	// Get a list of nodes for the specified class
 	THList< DWORD, THList< GUID, CTimeout > > *pCmds = m_lstUpdates.get( *pguidClass );
-	if ( pCmds == NULL ) return FALSE;
+	if ( pCmds == NULL )
+		return FALSE;
 
 	// Get the list of nodes wanting updates on this command
 	THList< GUID, CTimeout > *pNodes = pCmds->get( dwCmd );
-	if ( pNodes == NULL ) return FALSE;
+	if ( pNodes == NULL ) 
+		return FALSE;
 
 	BOOL bErased = FALSE;
 	THList< GUID, CTimeout >::iterator it = NULL;
@@ -328,6 +338,7 @@ BOOL CNetMgr::NotifyNetwork(const GUID *pguidClass, DWORD dwCmd)
 
 BOOL CNetMgr::CleanupNotifications()
 {_STT();
+
 	// Acquire lock
 	CTlLocalLock ll( *this );
 	if ( !ll.IsLocked() ) return FALSE;
@@ -405,6 +416,7 @@ BOOL CNetMgr::RemoveUpdateNotification(const GUID *pguidNode, const GUID *pguidC
 
 THList< GUID, CNetCom>::iterator CNetMgr::RemoveNode( THList< GUID, CNetCom>::iterator itNode )
 {_STT();
+
 	// Acquire lock
 	CTlLocalLock ll( *this );
 	if ( !ll.IsLocked() ) return NULL;

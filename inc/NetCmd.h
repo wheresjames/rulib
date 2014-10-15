@@ -132,7 +132,7 @@ public:
 	
 		\see 
 	*/
-	virtual CNetCom* GetNode( const GUID *pGuid ) = 0;
+	virtual CNetCom* GetNode( const GUID *pGuid, DWORD dwTo = TL_LOCK_TIMEOUT ) = 0;
 
 	//==============================================================
 	// FindByRxName()

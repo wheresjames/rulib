@@ -68,6 +68,8 @@ CAsyncWinSock::CAsyncWinSock()
 
 	m_pCallback = NULL;
 
+	m_bDisableThreads = 0;
+	
 	// Initialize sockets
 	InitSockets();
 }
@@ -120,10 +122,12 @@ BOOL CAsyncWinSock::OpenSocket( int af, int type, int protocol )
 	m_hSocket = socket( af, type, protocol );
 
 	// Is there a socket
-	if ( IsSocket() ) m_dwStatus = CWINSOCK_STATUS_IDLE;
+	if ( IsSocket() ) 
+		m_dwStatus = CWINSOCK_STATUS_IDLE;
 
 	// Start callbacks if needed
-	if ( m_lEnableCallbacks != 0 ) StartCallbacks( m_lEnableCallbacks );
+	if ( m_lEnableCallbacks != 0 ) 
+		StartCallbacks( m_lEnableCallbacks );
 
 	return IsSocket();
 }
@@ -136,7 +140,8 @@ BOOL CAsyncWinSock::CloseSocket( BOOL bBlocking, DWORD dwTimeout )
 	m_dwStatus = CWINSOCK_STATUS_DISCONNECTING;
 
 	// if connected and there is a thread, let thread do the work
-	if (	( !bBlocking || dwTimeout != 0 ) &&
+	if (	!m_bDisableThreads &&
+			( !bBlocking || dwTimeout != 0 ) &&
 			status == CWINSOCK_STATUS_CONNECTED && 
 			m_hThread != NULL )
 	{
@@ -195,22 +200,30 @@ BOOL CAsyncWinSock::ThreadCloseSocket()
 
 BOOL CAsyncWinSock::Listen(DWORD dwMaxConnections)
 {_STT();
-	if ( !IsSocket() ) return FALSE;
-	if ( dwMaxConnections == 0 ) return FALSE;
+	if ( !IsSocket() ) 
+		return FALSE;
+		
+	if ( dwMaxConnections == 0 ) 
+		return FALSE;
 
 	// Start the socket listening
 	BOOL success = ( listen( m_hSocket, (int)dwMaxConnections ) == 0 );
 
 	// Save status
-	if ( success ) m_dwStatus = CWINSOCK_STATUS_LISTENING;
+	if ( success ) 
+		m_dwStatus = CWINSOCK_STATUS_LISTENING;
 
 	return success;
 }
 
 BOOL CAsyncWinSock::Accept(CAsyncWinSock *pSocket, SOCKADDR *pSa, int *nAddr)
 {_STT();
-	if ( pSocket == NULL ) return FALSE;
-	if ( !IsSocket() ) return FALSE;
+
+	if ( pSocket == NULL ) 
+		return FALSE;
+
+	if ( !IsSocket() ) 
+		return FALSE;
 
 	// Accept and encapsulate the socket
 	BOOL success = pSocket->Attach( accept( m_hSocket, pSa, nAddr ) );
@@ -233,10 +246,12 @@ DWORD CAsyncWinSock::Recv(LPVOID pData, DWORD len, LPDWORD read, DWORD flags)
 	DWORD bytes = len;
 
 	// Init read variable
-	if ( read != NULL ) *read = SOCKET_ERROR;
+	if ( read != NULL ) 
+		*read = SOCKET_ERROR;
 
 	// Is there a socket?
-	if ( !IsSocket() ) return SOCKET_ERROR;
+	if ( !IsSocket() ) 
+		return SOCKET_ERROR;
 
 	// Attempt to read some data
 	int r = recv( m_hSocket, (LPTSTR)pData, (int)bytes, (int)flags );
@@ -248,24 +263,28 @@ DWORD CAsyncWinSock::Recv(LPVOID pData, DWORD len, LPDWORD read, DWORD flags)
 	if ( r == SOCKET_ERROR )
 	{
 		// Check for non-blocking read (no bytes)
-		if ( WSAGetLastError() == WSAEWOULDBLOCK ) return r;
+		if ( WSAGetLastError() == WSAEWOULDBLOCK ) 
+			return r;
 
 		return SOCKET_ERROR;
 
 	} // end if
 
 	// Save number of bytes read
-	if ( read != NULL ) *read = r;
+	if ( read != NULL ) 
+		*read = r;
 
 	return r;
 }
 
 DWORD CAsyncWinSock::Send( const LPVOID pData, DWORD len, LPDWORD sent, DWORD flags)
 {_STT();
-	if ( !IsSocket() ) return SOCKET_ERROR;
+	if ( !IsSocket() ) 
+		return SOCKET_ERROR;
 
 	// Zero length means NULL terminated string
-	if ( len == 0 ) while ( ( (char*)pData )[ len ] != 0x0 ) len++;
+	if ( len == 0 ) 
+		while ( ( (char*)pData )[ len ] != 0x0 ) len++;
 
 	// Send the data
 	DWORD s = send( m_hSocket, (LPCTSTR)pData, (int)len, (int)flags );	
@@ -288,7 +307,9 @@ DWORD CAsyncWinSock::Send( const LPVOID pData, DWORD len, LPDWORD sent, DWORD fl
 
 BOOL CAsyncWinSock::IoCtlSocket(long cmd, LPDWORD pdw)
 {_STT();
-	if ( !IsSocket() ) return SOCKET_ERROR;
+
+	if ( !IsSocket() ) 
+		return SOCKET_ERROR;
 	
 	// Relay the command
 	return ( ioctlsocket( m_hSocket, cmd, pdw ) == 0 ); 
@@ -296,7 +317,9 @@ BOOL CAsyncWinSock::IoCtlSocket(long cmd, LPDWORD pdw)
 
 BOOL CAsyncWinSock::IoCtl(DWORD code, LPVOID pInbuf, DWORD dwInbuf, LPVOID pOutbuf, DWORD dwOutbuf, LPDWORD pBytesReturned)
 {_STT();
-	if ( !IsSocket() ) return FALSE;
+
+	if ( !IsSocket() ) 
+		return FALSE;
 
 	// Execute the command
 	return ( WSAIoctl(	m_hSocket, code, pInbuf, dwInbuf, 
@@ -305,9 +328,13 @@ BOOL CAsyncWinSock::IoCtl(DWORD code, LPVOID pInbuf, DWORD dwInbuf, LPVOID pOutb
 
 BOOL CAsyncWinSock::Connect(PSOCKADDR psai, DWORD size)
 {_STT();
+
 	// Fill in whatever the user left out
-	if ( psai == NULL ) psai = (PSOCKADDR)&m_sai;
-	if ( size == 0 ) size = sizeof( m_sai );
+	if ( psai == NULL ) 
+		psai = (PSOCKADDR)&m_sai;
+		
+	if ( size == 0 ) 
+		size = sizeof( m_sai );
 
 	// Create socket if there is none
 	if ( !IsSocket() ) 
@@ -323,8 +350,11 @@ BOOL CAsyncWinSock::Connect(PSOCKADDR psai, DWORD size)
 	int err = WSAGetLastError();
 	
 	// Update status
-	if ( ret != SOCKET_ERROR ) m_dwStatus = CWINSOCK_STATUS_CONNECTED;
-	else m_dwStatus = CWINSOCK_STATUS_CONNECTING;
+	if ( ret != SOCKET_ERROR ) 
+		m_dwStatus = CWINSOCK_STATUS_CONNECTED;
+		
+	else 
+		m_dwStatus = CWINSOCK_STATUS_CONNECTING;
 
 	return ( ret != SOCKET_ERROR || err == WSAEWOULDBLOCK );
 }
@@ -334,12 +364,15 @@ BOOL CAsyncWinSock::Connect(LPCTSTR pAddress, DWORD dwPort)
 	DWORD port = 0;
 	
 	// Look up the host address
-	if ( !GetHostByName( pAddress, &port ) ) return FALSE;
+	if ( !GetHostByName( pAddress, &port ) ) 
+		return FALSE;
 
 	// Save connection information
 	strcpy( m_szHostName, pAddress );	
-	if ( dwPort != 0 ) m_dwPort = dwPort;
-	else m_dwPort = port;
+	if ( dwPort != 0 ) 
+		m_dwPort = dwPort;
+	else 
+		m_dwPort = port;
 
 	// Save address information
 	m_sai.sin_family = AF_INET;
@@ -384,14 +417,16 @@ BOOL CAsyncWinSock::GetHostByName(LPCTSTR pHost, LPDWORD pPort, LPHOSTENT *pHE)
 {_STT();
 	LPHOSTENT	phe;
 
-	if ( pHost == NULL || *pHost == 0x0 ) return FALSE;
+	if ( pHost == NULL || *pHost == 0x0 ) 
+		return FALSE;
 
 	// Check for dot number
 	DWORD port = 0;
 	if ( GetDotAddress( pHost, &m_paddr[ 0 ].S_un.S_addr, &port ) )
 	{
 		// Dot address could specify a port
-		if ( port != 0 && pPort != NULL ) *pPort = port;
+		if ( port != 0 && pPort != NULL ) 
+			*pPort = port;
 
 		// Fill in address information
 		m_he.h_name = NULL;
@@ -411,14 +446,17 @@ BOOL CAsyncWinSock::GetHostByName(LPCTSTR pHost, LPDWORD pPort, LPHOSTENT *pHE)
 	{
 		ULONG addr = inet_addr( pHost );
 		phe = gethostbyaddr( (char*)&addr, sizeof( ULONG ), PF_INET );
-		if ( phe == NULL ) return FALSE;
+		if ( phe == NULL ) 
+			return FALSE;
 	} // end if
 
 	// does the user want a copy of the data?
-	if ( pHE != NULL ) *pHE = phe;
+	if ( pHE != NULL ) 
+		*pHE = phe;
 
 	// else assign it to our member variable
-	else m_phe = phe;
+	else 
+		m_phe = phe;
 
 	return TRUE;	
 }
@@ -440,18 +478,22 @@ BOOL CAsyncWinSock::GetDotAddress(LPCTSTR pHost, LPDWORD pdwIP, LPDWORD pdwPort 
 				pHost[ i ] <= '~' && pHost[ i ] != ':' ) return FALSE;
 
 		// Save the character
-		else if (	( pHost[ i ] >= '0' && pHost[ i ] <= '9' ) ||
-					pHost[ i ] == '.' ) buf[ len++ ] = pHost[ i ];
+		else if (	( pHost[ i ] >= '0' && pHost[ i ] <= '9' ) || pHost[ i ] == '.' ) 
+			buf[ len++ ] = pHost[ i ];
 
 		// Count the dots
-		if ( pHost[ i ] >= '0' && pHost[ i ] <= '9' ) num++;
-		if ( num > 3 ) return FALSE;
-		if ( num && pHost[ i ] == '.' ) dots++, num = 0;
+		if ( pHost[ i ] >= '0' && pHost[ i ] <= '9' ) 
+			num++;
+		if ( num > 3 ) 
+			return FALSE;
+		if ( num && pHost[ i ] == '.' ) 
+			dots++, num = 0;
 	} // end for 
 	buf[ len++ ] = 0;
 
 	// Must have three dots
-	if ( dots != 3 ) return FALSE;
+	if ( dots != 3 ) 
+		return FALSE;
 
 	char	*ptr = buf;
 	DWORD	ip;
@@ -499,13 +541,16 @@ BOOL CAsyncWinSock::GetServeByName(LPCTSTR pName, LPCTSTR pProto, LPSERVENT *pSe
 
 	// Attempt to look up the service
 	pServe = getservbyname( pName, pProto );
-	if ( pServent == NULL ) return FALSE;
+	if ( pServent == NULL ) 
+		return FALSE;
 
 	// Is the user interested int the return value?
-	if ( pServent != NULL ) *pServent = pServe;
+	if ( pServent != NULL ) 
+		*pServent = pServe;
 
 	// Just use our member variable
-	else m_ps = pServe;
+	else 
+		m_ps = pServe;
 
 	return TRUE;
 }
@@ -653,7 +698,8 @@ BOOL CAsyncWinSock::StartCallbacks( long lEvents, BOOL bThread )
 	ResetEvent( m_hShutDown );
 
 	// Stop here if we don't want a thread
-	if ( !bThread ) return TRUE;
+	if ( m_bDisableThreads || !bThread ) 
+		return TRUE;
 	
 	// Start a callback thread
 	StartThread();
@@ -663,8 +709,10 @@ BOOL CAsyncWinSock::StartCallbacks( long lEvents, BOOL bThread )
 
 BOOL CAsyncWinSock::StopCallbacks( DWORD dwTimeout )
 {_STT();
+
 	// Stop the callback thread
-	StopThread( dwTimeout );
+	if ( !m_bDisableThreads )
+		StopThread( dwTimeout );
 
 	// Close event event
 	if ( m_hEvent != NULL )
@@ -685,6 +733,22 @@ BOOL CAsyncWinSock::StopCallbacks( DWORD dwTimeout )
 
 	return TRUE;
 }
+
+BOOL CAsyncWinSock::ServiceSocket()
+{
+	// Check events
+	DWORD ret = WaitForSingleObject( m_hEvent, 0 );
+
+	// Verify range
+	if ( ret != WAIT_OBJECT_0 )
+		return FALSE;
+		
+	// Handle network event
+	OnNetworkEvent( m_hEvent, &m_ne );
+
+	return TRUE;
+}
+
 
 //------------------------------------------------------------------
 // CAsyncWinSock::ThreadRun ()
@@ -850,7 +914,9 @@ BOOL CAsyncWinSock::OnShutdownEvent()
 	} // end else
 
 	ThreadCloseSocket();
-	SignalStop();
+	
+	if ( !m_bDisableThreads )
+		SignalStop();
 
 	return TRUE;
 }

@@ -597,6 +597,18 @@ public:
 	/// Returns the handle for the socket shutdown event
 	HANDLE GetShutdownHandle() { return m_hShutDown; }
 
+	//==============================================================
+	// ServiceSocket()
+	//==============================================================
+	/// Service socket events, must call this if threads are disabled
+	virtual BOOL ServiceSocket();
+
+	//==============================================================
+	// DisableThreads()
+	//==============================================================
+	/// Disable / enable threads
+	void DisableThreads( int b ) { m_bDisableThreads = b; }
+
 private:
 
 	/// Windows Socket API initialization return code
@@ -634,14 +646,17 @@ private:
 
 	/// User callback function address
 	AsyncWinSockCallback	m_pCallback;
-
+	
 protected:
 
 	/// User callback window handle
-	HWND			m_hWnd;
+	HWND					m_hWnd;
 
 	/// User callback window message value
-	UINT			m_uMsg;
+	UINT					m_uMsg;
+
+	/// Set to disable threads
+	int						m_bDisableThreads;
 
 public:	
 

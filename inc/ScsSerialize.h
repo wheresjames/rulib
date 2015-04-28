@@ -783,8 +783,8 @@ public:
 
 
     // *** Unicode
-    static int StrFmt( const wchar_t * pDest, const wchar_t * pFormat, ... )
-    {   return vswprintf( pDest, pFormat, (va_list)( &pFormat + 1 ) ); }
+//	static int StrFmt( const wchar_t * pDest, const wchar_t * pFormat, ... )
+//	{   return vswprintf( pDest, pFormat, (va_list)( &pFormat + 1 ) ); }
 
     static long long StrToInt64( const wchar_t * x_pStr, unsigned int x_uRadix ) 
     {   return _wcstoi64( x_pStr, NULL, x_uRadix ); }

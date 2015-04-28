@@ -956,8 +956,27 @@ public:
 	
 		\see 
 	*/
+	LPREGVALUE Set( LPCTSTR pName, unsigned int dwValue )
+	{	return Add( REG_DWORD, pName, &dwValue, sizeof( dwValue ) ); }
+
+#if !defined( __GNUC__ )
+
+	//==============================================================
+	// Set()
+	//==============================================================
+	/// Sets the DWORD representation of a value
+	/**
+		\param [in] pName	-	Value name
+		\param [in] dwValue	-	New value
+		
+		\return Pointer to REGVALUE strucure if success, otherwise NULL
+	
+		\see 
+	*/
 	LPREGVALUE Set( LPCTSTR pName, DWORD dwValue )
 	{	return Add( REG_DWORD, pName, &dwValue, sizeof( dwValue ) ); }
+
+#endif
 
 	//==============================================================
 	// Set()
@@ -970,10 +989,25 @@ public:
 		\return Pointer to REGVALUE strucure if success, otherwise NULL
 	
 		\see 
-	*/
-	LPREGVALUE Set( LPCTSTR pName, LONG lValue )
-	{	return Add( REG_DWORD, pName, (LPDWORD)&lValue, sizeof( lValue ) ); }
+	*/ // +++ converting long* to DWORD*? hello? 64 bit? wtf???
+//	LPREGVALUE Set( LPCTSTR pName, LONG lValue )
+//	{	return Add( REG_DWORD, pName, (LPDWORD)&lValue, sizeof( lValue ) ); }
 
+	//==============================================================
+	// Set()
+	//==============================================================
+	/// Sets the unsigned int representation of a value
+	/**
+		\param [in] pName	-	Value name
+		\param [in] uValue	-	New value
+		
+		\return Pointer to REGVALUE strucure if success, otherwise NULL
+	
+		\see 
+	*/
+//	LPREGVALUE Set( LPCTSTR pName, UINT uValue )
+//	{	return Set( pName, (DWORD)uValue ); }
+	
 	//==============================================================
 	// Set()
 	//==============================================================
@@ -987,7 +1021,7 @@ public:
 		\see 
 	*/
 	LPREGVALUE Set( LPCTSTR pName, int iValue )
-	{	return Set( pName, (LONG)iValue ); }
+	{	return Add( REG_DWORD, pName, &iValue, sizeof( iValue ) ); }
 
 	//==============================================================
 	// Set()
@@ -1004,21 +1038,6 @@ public:
 	LPREGVALUE Set( LPCTSTR pName, short iValue )
 	{	return Set( pName, (LONG)iValue ); }
 
-	//==============================================================
-	// Set()
-	//==============================================================
-	/// Sets the unsigned int representation of a value
-	/**
-		\param [in] pName	-	Value name
-		\param [in] uValue	-	New value
-		
-		\return Pointer to REGVALUE strucure if success, otherwise NULL
-	
-		\see 
-	*/
-	LPREGVALUE Set( LPCTSTR pName, UINT uValue )
-	{	return Set( pName, (DWORD)uValue ); }
-	
 	//==============================================================
 	// Set()
 	//==============================================================

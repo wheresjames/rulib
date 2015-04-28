@@ -377,6 +377,9 @@ private:
 	/// Set to true when a valid packet has beenf found
 	BOOL			m_bValidPacket;
 
+	/// Set to true when building a packet
+	BOOL			m_bInPacket;
+	
 	/// Packet header data
 	SPacketHeader	m_ph;
 

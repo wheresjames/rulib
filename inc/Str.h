@@ -78,9 +78,9 @@ public:
 	//==============================================================
 	/// Constructs a string initialized with a DWORD value
 	/**
-		\param [in] dw	-	DWORD value that is converted to string
+		\param [in] ul	-	unsigne long value that is converted to string
 	*/
-	CStr( unsigned long dw ) { *this = dw; }
+	CStr( unsigned long ul ) { *this = ul; }
 
 	//==============================================================
 	// CStr()
@@ -90,6 +90,24 @@ public:
 		\param [in] l	-	long value that is converted to a string
 	*/
 	CStr( long l ) { *this = l; }
+
+	//==============================================================
+	// CStr()
+	//==============================================================
+	/// Constructs a string initialized with a DWORD value
+	/**
+		\param [in] ui	-	DWORD value that is converted to string
+	*/
+	CStr( unsigned int ui ) { *this = ui; }
+
+	//==============================================================
+	// CStr()
+	//==============================================================
+	/// Constructs a string and initializes to a long value
+	/**
+		\param [in] i	-	long value that is converted to a string
+	*/
+	CStr( int i ) { *this = i; }
 
 	//==============================================================
 	// CStr()
@@ -161,13 +179,25 @@ public:
 	// operator =()
 	//==============================================================
 	/// Assigns string value of unsigned long
-	CStr& operator = ( unsigned long n );
+	CStr& operator = ( unsigned long ul );
 
 	//==============================================================
 	// operator =()
 	//==============================================================
 	/// Assigns string value of long
-	CStr& operator = ( long n );
+	CStr& operator = ( long l );
+
+	//==============================================================
+	// operator =()
+	//==============================================================
+	/// Assigns string value of unsigned int
+	CStr& operator = ( unsigned int ui );
+
+	//==============================================================
+	// operator =()
+	//==============================================================
+	/// Assigns string value of int
+	CStr& operator = ( int i );
 
 	//==============================================================
 	// operator =()

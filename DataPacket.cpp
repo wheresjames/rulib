@@ -32,6 +32,7 @@
 CDataPacket::CDataPacket()
 {_STT();
 	m_dwEncode = 0;
+	m_bInPacket = FALSE;
 	m_bValidPacket = FALSE;
 }
 
@@ -39,6 +40,7 @@ CDataPacket::CDataPacket( DWORD dwSize ) :
 				CCircBuf( TRUE, dwSize )
 {_STT();
 	m_dwEncode = 0;
+	m_bInPacket = FALSE;
 	m_bValidPacket = FALSE;
 }
 
@@ -50,6 +52,7 @@ CDataPacket::~CDataPacket()
 void CDataPacket::Destroy()
 {_STT();
 	m_bValidPacket = FALSE;
+	m_bInPacket = FALSE;
 }
 
 // *** Packet Writing ***
@@ -137,6 +140,9 @@ BOOL CDataPacket::InitPacket( DWORD dwType, DWORD dwDataBlocks, DWORD dwTotalDat
 {_STT();
 	SPacketHeader ph;
 
+	// In packet
+	m_bInPacket = TRUE;
+	
 	// Initialize the check sum
 	CMd5Rsa::MD5Init( &m_md5Context );
 
@@ -164,6 +170,10 @@ BOOL CDataPacket::InitPacket( DWORD dwType, DWORD dwDataBlocks, DWORD dwTotalDat
 
 BOOL CDataPacket::AddPacketData( DWORD dwType, LPVOID pData, DWORD dwSize )
 {_STT();
+
+	if ( !m_bInPacket )
+		return FALSE;
+
 	SDataHeader dh;
 	dh.dwLength = dwSize;
 	dh.dwType = dwType;
@@ -178,6 +188,10 @@ BOOL CDataPacket::AddPacketData( DWORD dwType, LPVOID pData, DWORD dwSize )
 
 BOOL CDataPacket::WritePacketData(LPVOID pData, DWORD dwSize, DWORD dwEncode )
 {_STT();
+
+	if ( !m_bInPacket )
+		return FALSE;
+
 	// Write out the packet header
 	if ( !Poke( pData, dwSize, dwEncode ) ) return FALSE;
 
@@ -186,6 +200,10 @@ BOOL CDataPacket::WritePacketData(LPVOID pData, DWORD dwSize, DWORD dwEncode )
 
 BOOL CDataPacket::OnInspectWrite( DWORD dwBlock, LPBYTE pBuf, DWORD dwSize )
 {_STT();
+
+	if ( !m_bInPacket )
+		return TRUE;
+
 	// Update the md5 hash
 	CMd5Rsa::MD5Update( &m_md5Context, pBuf, dwSize );
 
@@ -195,6 +213,13 @@ BOOL CDataPacket::OnInspectWrite( DWORD dwBlock, LPBYTE pBuf, DWORD dwSize )
 
 BOOL CDataPacket::EndPacket()
 {_STT();
+
+	if ( !m_bInPacket )
+		return FALSE;
+
+	// End of packet
+	m_bInPacket = FALSE;
+		
 	SCheckSum cs;
 
 	// Get the md5
@@ -305,6 +330,9 @@ BOOL CDataPacket::VerifyPacket()
 
 			// What is our calculated checksum?
 			CMd5Rsa::MD5Final( csCur.md5, &m_md5Context );
+			
+			// Not in packet
+			m_bInPacket = FALSE;
 
 			// Read the checksum from the buffer
 			Peek( &csBuf, sizeof( csBuf ), NULL, m_ph.dwLength - sizeof( SCheckSum ) );

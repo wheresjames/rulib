@@ -39,18 +39,34 @@ CStr::~CStr()
 }
 
 
-CStr& CStr::operator =(unsigned long n)
+CStr& CStr::operator =(unsigned long ul)
 {_STTEX();
 	char num[ 32 ];
-	wsprintf( num, "%lu", n );
+	wsprintf( num, "%lu", ul );
 	copy( num );
 	return *this;
 }
 
-CStr& CStr::operator =(long n)
+CStr& CStr::operator =(long l)
 {_STTEX();
 	char num[ 32 ];
-	wsprintf( num, "%li", n );
+	wsprintf( num, "%li", l );
+	copy( num );
+	return *this;
+}
+
+CStr& CStr::operator =(unsigned int ui)
+{_STTEX();
+	char num[ 32 ];
+	wsprintf( num, "%u", ui );
+	copy( num );
+	return *this;
+}
+
+CStr& CStr::operator =(int i)
+{_STTEX();
+	char num[ 32 ];
+	wsprintf( num, "%i", i );
 	copy( num );
 	return *this;
 }

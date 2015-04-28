@@ -484,6 +484,21 @@ public:
 	T& operator []( const int i ) { if ( i >= 0 && (DWORD)i < dwSize ) return pData[ i ]; else return pData[ 0 ]; }
 
 	//==============================================================
+	// operator []()
+	//==============================================================
+	/// Returns a reference to the specified array element
+	/**
+		\param [in] i	-	Array element index
+		
+		If the index is out of range, the first element is returned.
+
+		\return Reference to the specified element.
+	
+		\see 
+	*/
+	T& operator []( const unsigned int i ) { if ( i >= 0 && (DWORD)i < dwSize ) return pData[ i ]; else return pData[ 0 ]; }
+
+	//==============================================================
 	// operator &()
 	//==============================================================
 	/// Returns a reference to the array 

@@ -962,11 +962,11 @@ public:
 	
 		\see 
 	*/
-	BOOL Set( LPCTSTR pKey, LPCTSTR pName, DWORD dw )
-	{	CRKey *prk = GetKey( pKey );
-		if ( prk == NULL ) return FALSE;
-		return ( prk->Set( pName, dw ) != NULL );
-	} // end Set
+//	BOOL Set( LPCTSTR pKey, LPCTSTR pName, DWORD dw )
+//	{	CRKey *prk = GetKey( pKey );
+//		if ( prk == NULL ) return FALSE;
+//		return ( prk->Set( pName, dw ) != NULL );
+//	} // end Set
 
 	//==============================================================
 	// Set()
@@ -1000,11 +1000,11 @@ public:
 	
 		\see 
 	*/
-	BOOL Set( LPCTSTR pKey, LPCTSTR pName, long l )
-	{	CRKey *prk = GetKey( pKey );
-		if ( prk == NULL ) return FALSE;
-		return ( prk->Set( pName, l ) != NULL );
-	} // end Set
+//	BOOL Set( LPCTSTR pKey, LPCTSTR pName, long l )
+//	{	CRKey *prk = GetKey( pKey );
+//		if ( prk == NULL ) return FALSE;
+//		return ( prk->Set( pName, l ) != NULL );
+//	} // end Set
 
 	//==============================================================
 	// Set()
@@ -1028,6 +1028,48 @@ public:
 	//==============================================================
 	// Set()
 	//==============================================================
+	/// Sets the int representation of the specified value
+	/**
+		\param [in] pKey	-	Key name
+		\param [in] pName	-	Value name
+		\param [in] i		-	Value to set
+		
+		\return	Non-zero if success
+	
+		\see 
+	*/
+	BOOL Set( LPCTSTR pKey, LPCTSTR pName, unsigned int i )
+	{	CRKey *prk = GetKey( pKey );
+		if ( prk == NULL ) return FALSE;
+		return ( prk->Set( pName, i ) != NULL );
+	} // end Set
+
+#if !defined( __GNUC__ )
+
+	//==============================================================
+	// Set()
+	//==============================================================
+	/// Sets the int representation of the specified value
+	/**
+		\param [in] pKey	-	Key name
+		\param [in] pName	-	Value name
+		\param [in] i		-	Value to set
+		
+		\return	Non-zero if success
+	
+		\see 
+	*/
+	BOOL Set( LPCTSTR pKey, LPCTSTR pName, DWORD i )
+	{	CRKey *prk = GetKey( pKey );
+		if ( prk == NULL ) return FALSE;
+		return ( prk->Set( pName, i ) != NULL );
+	} // end Set
+
+#endif
+	
+	//==============================================================
+	// Set()
+	//==============================================================
 	/// Sets the unsigned int representation of the specified value
 	/**
 		\param [in] pKey	-	Key name
@@ -1038,11 +1080,11 @@ public:
 	
 		\see 
 	*/
-	BOOL Set( LPCTSTR pKey, LPCTSTR pName, UINT u )
-	{	CRKey *prk = GetKey( pKey );
-		if ( prk == NULL ) return FALSE;
-		return ( prk->Set( pName, u ) != NULL );
-	} // end Set
+//	BOOL Set( LPCTSTR pKey, LPCTSTR pName, UINT u )
+//	{	CRKey *prk = GetKey( pKey );
+//		if ( prk == NULL ) return FALSE;
+//		return ( prk->Set( pName, u ) != NULL );
+//	} // end Set
 
 	//==============================================================
 	// Set()
